@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<!-- import js & css -->
+<script type="text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+<body>
+<div>others1</div>
+<div>others2</div>
+<!-- id will replace to class(poster area css) -->
+<div id="posterArea">
+	<div>posterText1</div>
+	<div>posterText2</div>
+	<div>posterText3</div>
+</div>
+<div>others3</div>
+<div>others4</div>
+<button onclick="test()">testing</button>
+</body>
+<!-- js code -->
+<script type="text/javascript">
+
+//偵測click物件
+$(document).on('mousedown dblclick',function(event){
+	if(event.target.parentNode.id == 'posterArea'){
+		switch(event.type){
+			case 'mousedown': //mousedown是移動海報物件
+				moving();
+				break;
+			case 'dblclick':  //dblclick是更改文字
+				editTextContent();
+				break;
+		}
+	}
+});
+function moving(){
+
+}
+function editTextContent(){
+	
+}
+
+
+</script>
+</html>
