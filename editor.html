@@ -17,27 +17,52 @@
 <div>others4</div>
 <button onclick="test()">testing</button>
 </body>
-<!-- js code -->
+<!-- //////////////////////// js code //////////////////////////////////// -->
 <script type="text/javascript">
 
 //偵測click物件
 $(document).on('mousedown dblclick',function(event){
-	if(event.target.parentNode.id == 'posterArea'){
+	if(event.target.parentNode.id == 'posterArea'){	//若目標物件是海報內的物件，則再繼續判斷click方法
 		switch(event.type){
 			case 'mousedown': //mousedown是移動海報物件
 				moving();
 				break;
 			case 'dblclick':  //dblclick是更改文字
-				editTextContent();
+				transToTextarea(event.target);
 				break;
 		}
 	}
 });
+
 function moving(){
 
 }
-function editTextContent(){
+
+function transToTextarea(target){
+	//transform to textarea
+	var originContent = $(target).text();
+	var editText = $("<textarea />");
+	$(target).replaceWith(editText);
+	$(editText).focus();
+	setLastCharFocus(editText,originContent);	//focus on last character
 	
+	//set textarea listen event
+	$(editText).keypress(function(event){
+		//只按enter則變回div；按下enter+shift不用寫，會自行空行
+		if(event.keyCode == 13 && !(event.shiftKey)){
+			var afterContent = $(editText).val();
+			var divText = $("<div />");
+			$(editText).replaceWith(divText);
+			$(divText).focus();
+			setLastCharFocus(divText,afterContent);
+		}
+	});
+}
+
+//轉成textarea時能focus在最後一個字
+function setLastCharFocus(target,content){
+	$(target).text("temp");
+	$(target).text(content);
 }
 
 
