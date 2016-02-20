@@ -1,0 +1,42 @@
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/base/jquery-ui.css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+ 
+ 
+<!-- CSS -->
+<style type="text/css">
+.drag {
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    border: 1px solid black;
+    cursor: pointer;
+    border-radius: 10px;
+    float: left;
+    margin-left: 5px;
+    text-align: center;
+    font-size: 12px;
+}
+ 
+#posterBackground {
+    width: 500px;
+    height: 150px;
+    border: 1px solid gray;
+    background-color: #E0F0FF;
+}
+
+</style>
+ 
+ 
+<!-- Javascript -->
+<script>
+$(function(){
+    $("#drag1").draggable({
+            containment: "#dragBackground"
+    });
+});
+</script>
+
+<div id="dragBackground">    
+    <div id="drag1" class="drag" style="background-color:orange">拖曳</div>
+</div> 

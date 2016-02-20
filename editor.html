@@ -1,70 +1,71 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+<!-- meta info -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- import js & css -->
-<script type="text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.1/themes/base/jquery-ui.css" />
+<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script type="text/javascript" src="js/transTextarea.js"></script>
 </head>
+<!-- ////////////////////////////// CSS //////////////////////////////////////// -->
+<style type="text/css">
+.drag {
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    border: 1px solid black;
+    cursor: pointer;
+    border-radius: 10px;
+    float: left;
+    margin-left: 5px;
+    text-align: center;
+    font-size: 12px;
+}
+ 
+.posterArea {
+    width: 500px;
+    height: 500px;
+    border: 1px solid gray;
+    background-color: #E0F0FF;
+}
+
+</style>
+
+<!-- //////////////////////// js code //////////////////////////////////// -->
+<script type="text/javascript">
+
+//偵測dblclick物件，將之轉換成textarea
+$(document).on('dblclick',function(event){
+	if(event.target.parentNode.className == 'posterArea' && event.type == "dblclick"){	
+		transToTextarea(event.target);
+	}
+});
+
+//設定所有在posterArea的物件為draggable
+$(function(){
+    $(".drag").draggable({
+            containment: ".posterArea"
+    });
+});
+
+
+</script>
+<!-- ///////////////////////////// html /////////////////////////////// -->
 <body>
 <div>others1</div>
 <div>others2</div>
 <!-- id will replace to class(poster area css) -->
-<div id="posterArea">
-	<div>posterText1</div>
-	<div>posterText2</div>
-	<div>posterText3</div>
+<div class="posterArea" id="testing">
+	<div class="drag">posterText1</div>
+	<div class="drag">posterText2</div>
+	<div class="drag">posterText3</div>
+	<div class="drag">posterText4<br>posterText4.1</div>
 </div>
 <div>others3</div>
 <div>others4</div>
 <button onclick="test()">testing</button>
+
 </body>
-<!-- //////////////////////// js code //////////////////////////////////// -->
-<script type="text/javascript">
-
-//偵測click物件
-$(document).on('mousedown dblclick',function(event){
-	if(event.target.parentNode.id == 'posterArea'){	//若目標物件是海報內的物件，則再繼續判斷click方法
-		switch(event.type){
-			case 'mousedown': //mousedown是移動海報物件
-				moving();
-				break;
-			case 'dblclick':  //dblclick是更改文字
-				transToTextarea(event.target);
-				break;
-		}
-	}
-});
-
-function moving(){
-
-}
-
-function transToTextarea(target){
-	//transform to textarea
-	var originContent = $(target).text();
-	var editText = $("<textarea />");
-	$(target).replaceWith(editText);
-	$(editText).focus();
-	setLastCharFocus(editText,originContent);	//focus on last character
-	
-	//set textarea listen event
-	$(editText).keypress(function(event){
-		//只按enter則變回div；按下enter+shift不用寫，會自行空行
-		if(event.keyCode == 13 && !(event.shiftKey)){
-			var afterContent = $(editText).val();
-			var divText = $("<div />");
-			$(editText).replaceWith(divText);
-			$(divText).focus();
-			setLastCharFocus(divText,afterContent);
-		}
-	});
-}
-
-//轉成textarea時能focus在最後一個字
-function setLastCharFocus(target,content){
-	$(target).text("temp");
-	$(target).text(content);
-}
-
-
-</script>
 </html>
