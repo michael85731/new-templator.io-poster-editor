@@ -13,7 +13,6 @@ function transToTextarea(target){
 		if(event.keyCode == 13 && !(event.shiftKey)){
 			var afterContent = $(editText).val();
 			var newContent = processText(afterContent);
-			console.log(newContent.className);
 			$(editText).replaceWith(newContent);
 		}
 	});
@@ -27,11 +26,14 @@ function setLastCharFocus(target,content){
 
 //將textarea的內容轉成div
 function processText(content){
-	var lineBreakNum = content.match(/\n/g).length;
+	var lineBreakNum = 0;
+	if(content.match(/\n/g) != null){	//判斷空行數量
+		lineBreakNum = content.match(/\n/g).length;
+	}
 	var splitContent = content.split("\n");
 	var newText = $('<div></div>');
 	var tempContent = "";
-	for(var i = 0;i <= lineBreakNum;i++){
+	for(var i = 0;i <= lineBreakNum;i++){	//最後一個不用空行
 		if(i == lineBreakNum){
 			tempContent += splitContent[i];
 		}else{
@@ -39,6 +41,7 @@ function processText(content){
 		}
 	}
 	newText.html(tempContent);
-	newText.addClass("drags");
+	newText.addClass("drag ui-draggable ui-draggable-handle");
+	newText.css("position","relative");
 	return newText;
 }

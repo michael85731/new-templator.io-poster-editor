@@ -43,12 +43,24 @@ $(document).on('dblclick',function(event){
 	}
 });
 
-//設定所有在posterArea的物件為draggable
-$(function(){
-    $(".drag").draggable({
-            containment: ".posterArea"
-    });
+// select the target node
+var target = document.querySelector('div');
+ 
+// create an observer instance
+var observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    console.log(mutation.type);
+  });    
 });
+ 
+// configuration of the observer:
+var config = { attributes: true, childList: true, characterData: true};
+ 
+// pass in the target node, as well as the observer options
+observer.observe(target, config);
+
+observer.disconnect();
+observer.observe();
 
 
 </script>
@@ -57,7 +69,7 @@ $(function(){
 <div>others1</div>
 <div>others2</div>
 <!-- id will replace to class(poster area css) -->
-<div class="posterArea" id="testing">
+<div class="posterArea">
 	<div class="drag">posterText1</div>
 	<div class="drag">posterText2</div>
 	<div class="drag">posterText3</div>
