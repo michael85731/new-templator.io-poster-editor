@@ -8,20 +8,14 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 <script type="text/javascript" src="js/transTextarea.js"></script>
+<script type="text/javascript" src="js/activate.js"></script>
 </head>
 <!-- ////////////////////////////// CSS //////////////////////////////////////// -->
 <style type="text/css">
 .drag {
     width: 70px;
     height: 70px;
-    line-height: 70px;
-    border: 1px solid black;
-    cursor: pointer;
-    border-radius: 10px;
-    float: left;
-    margin-left: 5px;
-    text-align: center;
-    font-size: 12px;
+    cursor: default;
 }
  
 .posterArea {
@@ -35,32 +29,17 @@
 
 <!-- //////////////////////// js code //////////////////////////////////// -->
 <script type="text/javascript">
+//一開始就要跑的Function
+$(function(){
+  activateAll();
+});
 
-//偵測dblclick物件，將之轉換成textarea
+//偵測dblclick，將之轉換成textarea
 $(document).on('dblclick',function(event){
-	if(event.target.parentNode.className == 'posterArea' && event.type == "dblclick"){	
+	if(event.target.parentNode.className == 'posterArea' && event.type == "dblclick"){ 
 		transToTextarea(event.target);
 	}
 });
-
-// select the target node
-var target = document.querySelector('div');
- 
-// create an observer instance
-var observer = new MutationObserver(function(mutations) {
-  mutations.forEach(function(mutation) {
-    console.log(mutation.type);
-  });    
-});
- 
-// configuration of the observer:
-var config = { attributes: true, childList: true, characterData: true};
- 
-// pass in the target node, as well as the observer options
-observer.observe(target, config);
-
-observer.disconnect();
-observer.observe();
 
 
 </script>

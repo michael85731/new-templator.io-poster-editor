@@ -1,9 +1,16 @@
+//儲存原先的top,left
+var originTop = 0;
+var originLeft = 0;
 //轉為textarea
 function transToTextarea(target){
+	//紀錄原來element的座標
+	originTop = $(target).position().top;
+	originLeft = $(target).position().left;
 	//transform to textarea
 	var originContent = $(target).text();
 	var editText = $("<textarea />");
 	$(target).replaceWith(editText);	//now target replace to editText
+	setStyle(editText);
 	$(editText).focus();
 	setLastCharFocus(editText,originContent);	//focus on last character
 
@@ -13,6 +20,8 @@ function transToTextarea(target){
 		if(event.keyCode == 13 && !(event.shiftKey)){
 			var afterContent = $(editText).val();
 			var newContent = processText(afterContent);
+			singleActivate(newContent);
+			setStyle(newContent);
 			$(editText).replaceWith(newContent);
 		}
 	});
@@ -41,7 +50,11 @@ function processText(content){
 		}
 	}
 	newText.html(tempContent);
-	newText.addClass("drag ui-draggable ui-draggable-handle");
-	newText.css("position","relative");
 	return newText;
+}
+
+//處理css
+function setStyle(target){
+	$(target).addClass("drag");
+	$(target).css({top:originTop,left:originLeft,position:"absolute"});
 }
