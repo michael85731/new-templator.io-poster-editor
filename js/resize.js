@@ -6,6 +6,7 @@ var originWidth = 0;
 function resizeText(target){
 	nowHeight = $(target).height();
 	nowWidth = $(target).width();
+	
 	//find min change persent and change style
 	var heightPersent = (nowHeight / originHeight) * 100;
 	var widthPersent = (nowWidth / originWidth) * 100;
@@ -15,8 +16,32 @@ function resizeText(target){
 
 //讓文字變成resizable
 function resizableText(target){
+	var direction = ["nw","ne","sw","se","n","s","e","w"];
+	
+	//create control point
+	for(var i = 0;i < 8;i++){
+		var controlPoint = $("<div></div>");
+
+		//set controlPoint style
+		var styleName = "ui-resizable-handle ui-resizable-";
+		styleName = styleName + direction[i];
+		controlPoint.addClass(styleName);
+		controlPoint.attr("id",direction[i]+"grip");
+		$(target).append(controlPoint);
+	}
+
 	$(target).resizable({
-		containment: ".posterArea"
+		containment: ".posterArea",
+		handles:{
+			'nw': '#nwgrip',
+			'ne': '#negrip',
+			'sw': '#swgrip',
+			'se': '#segrip',
+			'n': '#ngrip',
+			'e': '#egrip',
+			's': '#sgrip',
+			'w': '#wgrip'
+		}
 	});
 	originWidth = $(target).width();
 	originHeight = $(target).height();

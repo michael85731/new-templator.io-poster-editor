@@ -5,10 +5,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- import js & css -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="css/controlPoint.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 <script type="text/javascript" src="js/transTextarea.js"></script>
-<script type="text/javascript" src="js/activate.js"></script>
+<script type="text/javascript" src="js/draggable.js"></script>
 <script type="text/javascript" src="js/resize.js"></script>
 </head>
 <!-- ////////////////////////////// CSS //////////////////////////////////////// -->
@@ -32,7 +33,7 @@
 <script type="text/javascript">
 //一開始就要跑的Function
 $(function(){
-    activateAll();
+    draggableAll();
 });
 
 $(document).on('dblclick mousedown resize',function(event){
@@ -41,14 +42,15 @@ $(document).on('dblclick mousedown resize',function(event){
 	if(event.target.parentNode.className == 'posterArea' && event.type == "dblclick"){ 
 		transToTextarea(event.target);
 	}
-    //偵測resize，讓文字跟著框框大小變動
-    if(event.target.parentNode.className == 'posterArea' && event.type == "resize"){
-        resizeText(event.target);
-    }
 
     //偵測到mousedown，讓文字resizable
     if(event.target.parentNode.className == 'posterArea' && event.type == "mousedown"){
         resizableText(event.target);
+    }
+    
+    //偵測resize，讓文字跟著框框大小變動
+    if(event.target.parentNode.className == 'posterArea' && event.type == "resize"){
+        resizeText(event.target);
     }
 });
 

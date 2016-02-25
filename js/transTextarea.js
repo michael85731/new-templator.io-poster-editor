@@ -1,11 +1,13 @@
 //儲存原先的top,left
 var originTop = 0;
 var originLeft = 0;
+
 //轉為textarea
 function transToTextarea(target){
 	//紀錄原來element的座標
 	originTop = $(target).position().top;
 	originLeft = $(target).position().left;
+	
 	//transform to textarea
 	var originContent = $(target).text();
 	var editText = $("<textarea />");
@@ -20,7 +22,7 @@ function transToTextarea(target){
 		if(event.keyCode == 13 && !(event.shiftKey)){
 			var afterContent = $(editText).val();
 			var newContent = processText(afterContent);
-			singleActivate(newContent);
+			singleDraggable(newContent);
 			setStyle(newContent);
 			$(editText).replaceWith(newContent);
 		}

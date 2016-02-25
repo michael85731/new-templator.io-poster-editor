@@ -1,12 +1,12 @@
 //讓所有posterArea裡面的原件都能draggable
-function activateAll(){
+function draggableAll(){
 	$(".posterArea").children("div").draggable({
     	containment: ".posterArea"
 	});
 }
 
 //讓新產生的div能有draggable的效果
-function singleActivate(target){
+function singleDraggable(target){
 	$(target).draggable({
 		containment: ".posterArea"
 	});
