@@ -12,7 +12,9 @@
 <script type="text/javascript" src="js/draggable.js"></script>
 <script type="text/javascript" src="js/resize.js"></script>
 </head>
+
 <!-- ////////////////////////////// CSS //////////////////////////////////////// -->
+
 <style type="text/css">
 .drag {
     position: absolute;
@@ -29,35 +31,10 @@
 
 </style>
 
-<!-- //////////////////////// js code //////////////////////////////////// -->
-<script type="text/javascript">
-//一開始就要跑的Function
-$(function(){
-    draggableAll();
-});
-
-$(document).on('dblclick mousedown resize',function(event){
-
-    //偵測dblclick，將之轉換成textarea
-	if(event.target.parentNode.className == 'posterArea' && event.type == "dblclick"){ 
-		transToTextarea(event.target);
-	}
-
-    //偵測到mousedown，讓文字resizable
-    if(event.target.parentNode.className == 'posterArea' && event.type == "mousedown"){
-        resizableText(event.target);
-    }
-    
-    //偵測resize，讓文字跟著框框大小變動
-    if(event.target.parentNode.className == 'posterArea' && event.type == "resize"){
-        resizeText(event.target);
-    }
-});
-
-
-</script>
 <!-- ///////////////////////////// html /////////////////////////////// -->
+
 <body>
+
 <div>others1</div>
 <div>others2</div>
 <!-- id will replace to class(poster area css) -->
@@ -65,11 +42,45 @@ $(document).on('dblclick mousedown resize',function(event){
 	<div class="drag">posterText1</div>
 	<div class="drag">posterText2</div>
 	<div class="drag">posterText3</div>
-	<div class="drag">posterText4<br>posterText4.1</div>
+	<div class="drag" id="testing">posterText4<br>posterText4.1</div>
 </div>
 <div>others3</div>
 <div>others4</div>
 <button onclick="test()">testing</button>
 
 </body>
+
+<!-- //////////////////////// js code //////////////////////////////////// -->
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    draggableAll();
+
+    $(".posterArea").on('dblclick mousedown resize click',function(event){
+
+        //偵測dblclick，將之轉換成textarea
+        if(event.target.parentNode.className == 'posterArea' && event.type == "dblclick"){ 
+            transToTextarea(event.target);
+        }
+
+        //偵測到mousedown，讓文字resizable
+        if(event.target.parentNode.className == 'posterArea' && event.type == "mousedown" || event.type == "click"){
+            resizableText(event.target);
+        }
+
+        //偵測resize，讓文字跟著框框大小變動
+        if(event.target.parentNode.className == 'posterArea' && event.type == "resize"){
+            resizeText(event.target);
+        }
+
+        //偵測click且並非點選物件時，取消目前有resize point的物件
+        if(event.target.parentNode.className != 'posterArea' && event.type == "click"){
+            cancelResizePoint();
+        }
+    });
+});
+
+</script>
+
 </html>
