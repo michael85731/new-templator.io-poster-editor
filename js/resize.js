@@ -6,7 +6,7 @@ function resizeText(target){
 	//find minimize change and change style
 	var heightDiff = (nowHeight / target.originHeight);
 	var widthDiff = (nowWidth / target.originWidth);
-	
+
 	var adjustment = Math.min(heightDiff,widthDiff);
 	var unit = $(target).css("font-size").slice(-2);
 	var result = parseFloat(target.originSize * adjustment) + unit;
@@ -48,11 +48,10 @@ function resizableText(target){
 	});
 
 	//record origin height and width
-	if(typeof(target.recognized) == 'undefined'){
+	if(typeof(target.originWidth) == 'undefined'){
 		target.originWidth = $(target).width();
 		target.originHeight = $(target).height();
 		target.originSize = parseFloat($(target).css("font-size").slice(0,-2));
-		target.recognized = true;
 	}
 }
 
