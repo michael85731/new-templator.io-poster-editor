@@ -26,14 +26,8 @@
     width: 500px;
     height: 500px;
     border: 1px solid gray;
-}
-/*real poster's background*/
-/*.posterArea {
-    width: 500px;
-    height: 500px;
-    border: 1px solid gray;
     background-color: #E0F0FF;
-}*/
+}
 
 </style>
 
@@ -66,22 +60,22 @@ $(document).ready(function(){
     $(".posterArea").on('dblclick mousedown resize click',function(event){
 
         //偵測dblclick，將之轉換成textarea
-        if(event.target.parentNode.className == 'posterArea' && event.type == "dblclick"){ 
+        if($(event.target).parent().attr('class') == 'posterArea' && event.type == "dblclick"){ 
             transToTextarea(event.target);
         }
 
         //偵測到mousedown，讓文字resizable
-        if(event.target.parentNode.className == 'posterArea' && event.type == "mousedown" || event.type == "click"){
+        if($(event.target).parent().attr('class') == 'posterArea' && event.type == "mousedown" || event.type == "click"){
             resizableText(event.target);
         }
 
         //偵測resize，讓文字跟著框框大小變動
-        if(event.target.parentNode.className == 'posterArea' && event.type == "resize"){
+        if($(event.target).parent().attr('class') == 'posterArea' && event.type == "resize"){
             resizeText(event.target);
         }
 
         //偵測click且並非點選物件時，取消目前有resize point的物件
-        if(event.target.parentNode.className != 'posterArea' && event.type == "click"){
+        if($(event.target).parent().attr('class') != 'posterArea' && event.type == "click"){
             cancelResizePoint();
         }
     });
