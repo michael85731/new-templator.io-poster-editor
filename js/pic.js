@@ -12,14 +12,15 @@ function addPic(event){
 	var newPic = $('<img />');
 	$(newPic).attr('src',event.target.result);
 	$(newPic).addClass('pic');
-	
+
 	//due to jquery's restriction, i have to create a container to display img element. otherwhise image can't being able to drag and resize.
 	var picContainer = $("<div />");
 	$(picContainer).css("display","inline-block");
 	$(picContainer).append(newPic);
+	$(picContainer).addClass('pic');
 
-	$(newPic).resizable();
-	$(picContainer).draggable();
+	singleDraggable(picContainer);
+	singleResizable(picContainer);
 
 	$('.posterArea').append(picContainer);
 }

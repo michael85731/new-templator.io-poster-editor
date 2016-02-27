@@ -15,6 +15,17 @@ function resizeText(target){
 	}
 }
 
+//當IMG觸發resize事件時，能跟著變動pic size
+function resizePic(target){
+	nowHeight = $(target).height();
+	nowWidth = $(target).width();
+
+	var pic = target.firstChild;
+	$(pic).height(nowHeight);
+	$(pic).width(nowWidth);
+}
+
+
 //讓文字變成resizable
 function singleResizable(target){
 	unResizable(target);	//避免重複新增control point
@@ -48,7 +59,7 @@ function singleResizable(target){
 		}
 	});
 
-	//record origin height and width
+	//record text(div) origin height and width
 	if(typeof(target.originWidth) == 'undefined'){
 		target.originWidth = $(target).width();
 		target.originHeight = $(target).height();
