@@ -11,22 +11,33 @@
 <script type="text/javascript" src="js/transTextarea.js"></script>
 <script type="text/javascript" src="js/draggable.js"></script>
 <script type="text/javascript" src="js/resize.js"></script>
+<script type="text/javascript" src="js/text.js"></script>
+<script type="text/javascript" src="js/pic.js"></script>
 </head>
 
 <!-- ////////////////////////////// CSS //////////////////////////////////////// -->
 
 <style type="text/css">
+
+.posterArea {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    border: 1px solid gray;
+    background-color: #E0F0FF;
+}
+
 .drag {
     position: absolute;
     cursor: default;
     border:1px solid black;
 }
-/*before loading's background*/
-.posterArea {
-    width: 500px;
-    height: 500px;
+
+.pic{
+    position: absolute;
+    width: 100%;
+    height:100%;
     border: 1px solid gray;
-    background-color: #E0F0FF;
 }
 
 </style>
@@ -42,11 +53,15 @@
 	<div class="drag">posterText1</div>
 	<div class="drag">posterText2</div>
 	<div class="drag">posterText3</div>
-	<div class="drag" id="testing">posterText4<br>posterText4.1</div>
+	<div class="drag">posterText4<br>posterText4.1</div>
 </div>
+<button onclick="addText()">add Text</button>
+
+<input type="file">
+
+<button onclick="test()">testing</button>
 <div>others3</div>
 <div>others4</div>
-<button onclick="test()">testing</button>
 
 </body>
 
@@ -55,29 +70,36 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-    draggableAll();
+    $("input[type=file]").change(function(){
+        loadPic(this);
+    });
 
+    //posterArea's event setting
+    draggableAll();
     $(".posterArea").on('dblclick mousedown resize click',function(event){
 
-        //偵測dblclick，將之轉換成textarea
-        if($(event.target).parent().attr('class') == 'posterArea' && event.type == "dblclick"){ 
-            transToTextarea(event.target);
+        if($(event.target).parent().attr('class') == 'posterArea' && event.target.tagName == 'DIV'){
+
+            switch(event.type){
+                case 'resize':
+                    resizeText(event.target);       //偵測resize，設定resize時的text大小
+                    break;
+                case 'dblclick':
+                    transToTextarea(event.target);  //偵測dblclick，將之轉換成textarea
+                    break;
+                case 'mousedown':
+                    singleResizable(event.target);    //偵測到mousedown or click，讓文字resizable
+                    break;
+            }
+
+        }else{
+            switch(event.type){
+                case 'click':
+                    cancelResizePoint();            //偵測click且並非點選物件時，取消目前有resize point的物件
+                    break;
+            }
         }
 
-        //偵測到mousedown，讓文字resizable
-        if($(event.target).parent().attr('class') == 'posterArea' && event.type == "mousedown" || event.type == "click"){
-            resizableText(event.target);
-        }
-
-        //偵測resize，讓文字跟著框框大小變動
-        if($(event.target).parent().attr('class') == 'posterArea' && event.type == "resize"){
-            resizeText(event.target);
-        }
-
-        //偵測click且並非點選物件時，取消目前有resize point的物件
-        if($(event.target).parent().attr('class') != 'posterArea' && event.type == "click"){
-            cancelResizePoint();
-        }
     });
 });
 

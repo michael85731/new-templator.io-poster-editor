@@ -12,21 +12,15 @@ function transToTextarea(target){
 	var originContent = $(target).text();
 	var editText = $("<textarea />");
 	$(target).replaceWith(editText);	//now target replace to editText
+	
+	editText.exist = true;	//紀錄已經存在於海報，在setStyle中用於設定element的top,left
 	setStyle(editText);
+	
+	//set focus
 	$(editText).focus();
 	setLastCharFocus(editText,originContent);	//focus on last character
 
-	//set textarea listen event
-	$(editText).keypress(function(event){
-		//只按enter則變回div
-		if(event.keyCode == 13 && !(event.shiftKey)){
-			var afterContent = $(editText).val();
-			var newContent = processText(afterContent);
-			singleDraggable(newContent);
-			setStyle(newContent);
-			$(editText).replaceWith(newContent);
-		}
-	});
+	setConvertDiv(editText);	//讓目前textarea能轉成div
 }
 
 //轉成textarea時能focus在最後一個字
@@ -35,14 +29,35 @@ function setLastCharFocus(target,content){
 	$(target).text(content);
 }
 
+//將目標textarea新增能轉成div的功能
+function setConvertDiv(target){
+	$(target).keypress(function(event){
+		
+		//只按enter則變回div
+		if(event.keyCode == 13 && !(event.shiftKey)){
+			var afterContent = $(target).val();
+			var newDiv = processTextToDiv(afterContent);
+			singleDraggable(newDiv);
+
+			//若目前element存在，則不需重新設定style
+			if(target.exist){
+				newDiv.exist = true;
+			}
+			setStyle(newDiv);
+
+			$(target).replaceWith(newDiv);
+		}
+	});
+}
+
 //將textarea的內容轉成div
-function processText(content){
+function processTextToDiv(content){
 	var lineBreakNum = 0;
 	if(content.match(/\n/g) != null){	//判斷空行數量
 		lineBreakNum = content.match(/\n/g).length;
 	}
 	var splitContent = content.split("\n");
-	var newText = $('<div></div>');
+	var newDiv = $('<div></div>');
 	var tempContent = "";
 	for(var i = 0;i <= lineBreakNum;i++){	//最後一個不用空行
 		if(i == lineBreakNum){
@@ -51,12 +66,16 @@ function processText(content){
 			tempContent += splitContent[i] + "<br>";
 		}
 	}
-	newText.html(tempContent);
-	return newText;
+	newDiv.html(tempContent);
+	return newDiv;
 }
 
 //處理css
 function setStyle(target){
 	$(target).addClass("drag");
-	$(target).css({top:originTop,left:originLeft,position:"absolute"});
+	if(target.exist){
+		$(target).css({top:originTop,left:originLeft,position:"absolute"});
+	}else{
+		$(target).css({'top':0,'left':0,'position':"absolute"});
+	}
 }

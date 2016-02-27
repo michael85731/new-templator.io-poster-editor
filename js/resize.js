@@ -16,7 +16,7 @@ function resizeText(target){
 }
 
 //讓文字變成resizable
-function resizableText(target){
+function singleResizable(target){
 	unResizable(target);	//避免重複新增control point
 
 	var direction = ["nw","ne","sw","se","n","s","e","w"];
@@ -28,6 +28,7 @@ function resizableText(target){
 		//set controlPoint style
 		var styleName = "ui-resizable-handle ui-resizable-";
 		styleName = styleName + direction[i];
+
 		controlPoint.addClass(styleName);
 		controlPoint.attr("id",direction[i]+"grip");
 		$(target).append(controlPoint);
@@ -55,7 +56,7 @@ function resizableText(target){
 	}
 }
 
-//取消resizable，不重複resizable element
+//取消resizable，不重複resize point
 function unResizable(target){
 	$(".ui-resizable-handle").remove();
 	try{
@@ -65,7 +66,7 @@ function unResizable(target){
 	}
 }
 
-//取消resize point
+//取消resizable element
 function cancelResizePoint(){
 	$(".ui-resizable-handle").parent().resizable('destroy');
 	$(".ui-resizable-handle").remove();
