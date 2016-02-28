@@ -54,10 +54,10 @@ function setConvertDiv(target){
 			//統一用html()計算
 			var afterContent = $(target).val();
 			$(target).html(afterContent);
+			
+			//調整textarea的顯示樣式
 			adjustTextarea(target);
 		}
-
-
 
 	});
 }
