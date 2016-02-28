@@ -12,13 +12,13 @@ function transToTextarea(target){
 	
 	//transform to textarea
 	var originContent = $(target).html();
-	originContent = originContent.replace(/<br>/g,'\n');	//將<br>換成textarea可以讀懂的'\n'
+	originContent = originContent.replace(/<br>/g,'\n');
 	var editText = $("<textarea />");
 	$(target).replaceWith(editText);	//now target replace to editText
 	
 	//紀錄已經存在於海報，在setTextareaStyle中用於設定element的top,left
 	editText.exist = true;
-	setTextareaStyle(originContent,editText);
+	setTextareaStyle(editText,originContent,originTop,originLeft);
 	
 	//set focus
 	$(editText).focus();
@@ -33,9 +33,10 @@ function setLastCharFocus(target,content){
 	$(target).text(content);
 }
 
-//將目標textarea新增能轉成div的功能
+//將目標textarea新增能轉成div的event
 function setConvertDiv(target){
 	$(target).keypress(function(event){
+
 		//只按enter則變回div
 		if(event.keyCode == 13 && !(event.shiftKey)){
 			var afterContent = $(target).val();
