@@ -4,17 +4,21 @@ var originLeft = 0;
 
 //轉為textarea
 function transToTextarea(target){
+	unResizable(target); 	//取消resize point,避免html()時會取到resize point
+	
 	//紀錄原來element的座標
 	originTop = $(target).position().top;
 	originLeft = $(target).position().left;
 	
 	//transform to textarea
-	var originContent = $(target).text();
+	var originContent = $(target).html();
+	originContent = originContent.replace(/<br>/g,'\n');	//將<br>換成textarea可以讀懂的'\n'
 	var editText = $("<textarea />");
 	$(target).replaceWith(editText);	//now target replace to editText
 	
-	editText.exist = true;	//紀錄已經存在於海報，在setStyle中用於設定element的top,left
-	setStyle(editText);
+	//紀錄已經存在於海報，在setTextareaStyle中用於設定element的top,left
+	editText.exist = true;
+	setTextareaStyle(originContent,editText);
 	
 	//set focus
 	$(editText).focus();
@@ -32,7 +36,6 @@ function setLastCharFocus(target,content){
 //將目標textarea新增能轉成div的功能
 function setConvertDiv(target){
 	$(target).keypress(function(event){
-		
 		//只按enter則變回div
 		if(event.keyCode == 13 && !(event.shiftKey)){
 			var afterContent = $(target).val();
@@ -43,9 +46,14 @@ function setConvertDiv(target){
 			if(target.exist){
 				newDiv.exist = true;
 			}
-			setStyle(newDiv);
+			setTextStyle(newDiv);
 
 			$(target).replaceWith(newDiv);
+		}else{
+			//統一用html()計算
+			var afterContent = $(target).val();
+			$(target).html(afterContent);
+			adjustTextarea(target);
 		}
 	});
 }
@@ -71,10 +79,10 @@ function processTextToDiv(content){
 }
 
 //處理css
-function setStyle(target){
-	$(target).addClass("text");
+function setTextStyle(target){
+	$(target).addClass('text');
 	if(target.exist){
-		$(target).css({top:originTop,left:originLeft,position:"absolute"});
+		$(target).css({'top':originTop,'left':originLeft,'position':"absolute"});
 	}else{
 		$(target).css({'top':0,'left':0,'position':"absolute"});
 	}
