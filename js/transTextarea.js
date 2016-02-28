@@ -35,7 +35,7 @@ function setLastCharFocus(target,content){
 
 //將目標textarea新增能轉成div的event
 function setConvertDiv(target){
-	$(target).keypress(function(event){
+	$(target).on('keyup keydown',function(event){
 
 		//只按enter則變回div
 		if(event.keyCode == 13 && !(event.shiftKey)){
@@ -47,7 +47,7 @@ function setConvertDiv(target){
 			if(target.exist){
 				newDiv.exist = true;
 			}
-			setTextStyle(newDiv);
+			setTextStyle(newDiv,originTop,originLeft);
 
 			$(target).replaceWith(newDiv);
 		}else{
@@ -77,14 +77,4 @@ function processTextToDiv(content){
 	}
 	newDiv.html(tempContent);
 	return newDiv;
-}
-
-//處理css
-function setTextStyle(target){
-	$(target).addClass('text');
-	if(target.exist){
-		$(target).css({'top':originTop,'left':originLeft,'position':"absolute"});
-	}else{
-		$(target).css({'top':0,'left':0,'position':"absolute"});
-	}
 }

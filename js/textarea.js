@@ -14,7 +14,7 @@ function adjustTextarea(target){
 	var newContent = $(target).html();
 	newContent = newContent.replace(/<br>/g,'\n');
 	console.log(newContent);
-	var mostWidth = countTextWidth(newContent);
+	var mostWidth = countTextWidth(newContent) + 15;
 	var rows = countTextRows(newContent);
 
 	$(target).width(mostWidth);
