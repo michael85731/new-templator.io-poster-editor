@@ -78,7 +78,7 @@ function unResizable(target){
 }
 
 //取消resizable element
-function cancelResizePoint(){
+function cancelResizableElement(){
 	$(".ui-resizable-handle").parent().resizable('destroy');
 	$(".ui-resizable-handle").remove();
 }

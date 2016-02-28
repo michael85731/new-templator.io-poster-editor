@@ -27,10 +27,12 @@
     background-color: #E0F0FF;
 }
 
-.drag {
+.text {
     position: absolute;
     cursor: default;
     border:1px solid black;
+    direction:ltr;
+    /*letter-spacing:8px;*/
 }
 
 .pic{
@@ -51,10 +53,10 @@
 <div>others2</div>
 <!-- id will replace to class(poster area css) -->
 <div class="posterArea">
-	<div class="drag">posterText1</div>
-	<div class="drag">posterText2</div>
-	<div class="drag">posterText3</div>
-	<div class="drag">posterText4<br>posterText4.1</div>
+	<div class="text">posterText1</div>
+	<div class="text">posterText2</div>
+	<div class="text">posterText3</div>
+	<div class="text">posterText4<br>posterText4.1</div>
 </div>
 <button onclick="addText()">add Text</button>
 
@@ -79,35 +81,34 @@ $(document).ready(function(){
     draggableAll();
     $(".posterArea").on('dblclick mousedown resize click',function(event){
         
-        //判斷目前event.target的類型
-        if($(event.target).find('img').length){
-            
-            //目前為pic(img) event
-            switch(event.type){
-                case 'resize':
-                    resizePic(event.target);
-                    break;
-                case 'mousedown':
+        var isPosterElement = $(event.target).hasClass('text') || $(event.target).hasClass('pic');
+
+        if(isPosterElement && event.type == 'mousedown'){
+            switch(event.target.tagName){
+                case 'IMG':
                     singleResizable($(event.target).parent());
                     break;
+                case 'DIV':
+                    singleResizable(event.target);
+                    break;
             }
+        }
 
-        }else{
-
-            //目前為text(div) event
-            switch(event.type){
-                case 'resize':
-                    resizeText(event.target);       //偵測resize，設定resize時的text大小
-                    break;
-                case 'dblclick':
-                    transToTextarea(event.target);  //偵測dblclick，將之轉換成textarea
-                    break;
-                case 'mousedown':
-                    singleResizable(event.target);    //偵測到mousedown or click，讓文字resizable
-                    break;
-                case 'click':
-                    cancelResizePoint();     
+        if(event.type == 'resize'){
+            switch($(event.target).hasClass('text')){
+                case true:
+                    resizeText(event.target);
+                case false:
+                    resizePic(event.target);
             }
+        }
+
+        if(event.type == 'dblclick' && $(event.target).hasClass('text')){
+            transToTextarea(event.target);
+        }
+
+        if($(event.target).hasClass('posterArea')){
+            cancelResizableElement();
         }
 
     });

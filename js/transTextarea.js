@@ -72,7 +72,7 @@ function processTextToDiv(content){
 
 //處理css
 function setStyle(target){
-	$(target).addClass("drag");
+	$(target).addClass("text");
 	if(target.exist){
 		$(target).css({top:originTop,left:originLeft,position:"absolute"});
 	}else{
