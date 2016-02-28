@@ -35,7 +35,7 @@ function setLastCharFocus(target,content){
 
 //將目標textarea新增能轉成div的event
 function setConvertDiv(target){
-	$(target).on('keyup keydown',function(event){
+	$(target).on('keydown input',function(event){
 
 		//只按enter則變回div
 		if(event.keyCode == 13 && !(event.shiftKey)){
@@ -56,6 +56,9 @@ function setConvertDiv(target){
 			$(target).html(afterContent);
 			adjustTextarea(target);
 		}
+
+
+
 	});
 }
 

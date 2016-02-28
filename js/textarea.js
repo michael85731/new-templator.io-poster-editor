@@ -1,7 +1,7 @@
 //設定初始textarea樣式
 function setTextareaStyle(target,originContent,originTop,originLeft){
 	$(target).addClass('input');
-	var mostWidth = countTextWidth(originContent) + 5;
+	var mostWidth = countTextWidth(originContent);
 	var rows = countTextRows(originContent);
 
 	$(target).width(mostWidth);
@@ -13,8 +13,8 @@ function setTextareaStyle(target,originContent,originTop,originLeft){
 function adjustTextarea(target){
 	var newContent = $(target).html();
 	newContent = newContent.replace(/<br>/g,'\n');
-	console.log(newContent);
-	var mostWidth = countTextWidth(newContent) + 15;
+
+	var mostWidth = countTextWidth(newContent);
 	var rows = countTextRows(newContent);
 
 	$(target).width(mostWidth);
@@ -30,7 +30,7 @@ function countTextWidth(content){
 		var tempSpan = $('<span />'); 	//利用span計算width
 		$(tempSpan).html(content[i]);
 		$('body').append(tempSpan);
-		allWidth.push($(tempSpan).width());
+		allWidth.push($(tempSpan).innerWidth() + 5);
 		tempSpan.remove();
 	}
 
