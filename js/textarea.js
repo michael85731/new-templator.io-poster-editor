@@ -1,4 +1,4 @@
-//設定初始textarea樣式
+//設定既有文字的textarea樣式
 function setTextareaStyle(target,originContent,originTop,originLeft){
 	$(target).addClass('input');
 	var mostWidth = countTextWidth(originContent);

@@ -1,0 +1,23 @@
+/*復古*/
+.vintage{
+	-webkit-filter: grayscale(150%) sepia(30%);
+    filter: grayscale(150%) sepia(30%);
+}
+
+/*泛黃*/
+.sunrise{
+    -webkit-filter: sepia(100%); 
+    filter: sepia(100%);
+}
+
+/*高對比*/
+.lomo{
+	-webkit-filter: contrast(300%); 
+    filter: contrast(300%);
+}
+
+/*清晰*/
+.clarity{
+	-webkit-filter: brightness(115%) contrast(110%);
+    filter: brightness(115%) contrast(110%);
+}

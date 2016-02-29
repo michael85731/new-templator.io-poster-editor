@@ -28,9 +28,5 @@ function setTextStyle(target,originTop,originLeft){
 //change text color
 function chColor(colorElement){
 	var color = '#' + $(colorElement).val();
-
-	//藉由resize point,判斷是目前是否為text
-	if($('.ui-resizable-handle').parent().hasClass('text')){
-		$('.ui-resizable-handle').parent().css('color',color);
-	}
+	$('.ui-resizable-handle').parent().css('color',color);
 }

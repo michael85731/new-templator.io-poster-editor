@@ -9,6 +9,8 @@ function loadPic(target){
 
 //讀取完將圖片加到posterArea
 function addPic(event){
+	$('.picFilter').attr('src',event.target.result); 	//change filter preview
+
 	var newPic = $('<img />');
 	$(newPic).attr('src',event.target.result);
 	$(newPic).addClass('pic');
@@ -27,5 +29,10 @@ function addPic(event){
 
 //改變圖片濾鏡
 function chFilter(filterElement){
-	
+	//先清除先前的filter
+	var nowFilter = $('.ui-resizable-handle').parent().attr('class').split(' ').pop();
+	$('.ui-resizable-handle').parent().removeClass(nowFilter);
+
+	var newFilter = $(filterElement).attr('class').split('picFilter')[1];
+	$('.ui-resizable-handle').parent().addClass(newFilter);
 }

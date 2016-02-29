@@ -6,6 +6,7 @@
 <!-- import js & css -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="css/controlPoint.css">
+<link rel="stylesheet" type="text/css" href="css/picFliter.css">
 
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
@@ -58,10 +59,19 @@ body{
     overflow: hidden;
 }
 
-.color{
-    height:50px;
-    width:50px;
+.picFilter{
+    background-color: #FCC4FF;
+    height:180px;
+    width:150px;
     float:left;
+    margin-left:5px;
+}
+
+.tools{
+    float:left;
+    height:225px;
+    width: 780px;
+    border:1px solid black;
 }
 
 </style>
@@ -79,11 +89,22 @@ body{
 	<div class="text">posterText3</div>
 	<div class="text">posterText4<br>posterText4.1</div>
 </div>
-<button onclick="addText()">add Text</button>
-<input type="file">
+<br>
+<div class="tools">
+    <div style="margin:5px;">
+        <button onclick="addText()">add Text</button>
+        <input type="file">
+        <input class='color-pick' type="color">
+    </div>
 
-<div>
-    <input class='color-pick' type="color" style="float:left;">
+    <div>
+        <img src="filterBg.jpg" class="picFilter">
+        <img src="filterBg.jpg" class="picFilter vintage">
+        <img src="filterBg.jpg" class="picFilter sunrise">
+        <img src="filterBg.jpg" class="picFilter lomo">
+        <img src="filterBg.jpg" class="picFilter clarity">
+    </div>
+
 </div>
 
 <div style="float:left;clear:both;">others3</div>
@@ -94,11 +115,24 @@ body{
 
 <script type="text/javascript">
 
+//檢查現在是否有text or pic被選到
+var picSelected = false;
+var textSelected = false;
+
 $(document).ready(function(){
+
+    //pic fliter event
+    $('.picFilter').on('mousedown',function(event){
+        if(picSelected){
+            chFilter(event.target);
+        }
+    });
 
     //text tools event
     $('.color-pick').on('change',function(event){
-        chColor(event.target);
+        if(textSelected){
+            chColor(event.target);
+        }
     });
 
     //add pic event
@@ -109,10 +143,21 @@ $(document).ready(function(){
     //posterArea's event setting
     draggableAll();
     $(".posterArea").on('dblclick mousedown resize click',function(event){
-        
-        var isPosterElement = $(event.target).hasClass('text') || $(event.target).hasClass('pic');
 
-        if(isPosterElement && event.type == 'mousedown'){
+        //更新目前選取的element
+        if($(event.target).attr('class') != 'posterArea'){  //不能選到自己
+            if($(event.target).hasClass('text')){
+                textSelected = true;
+            }else if($(event.target).hasClass('pic')){
+                picSelected = true;
+            }else{
+                textSelected = false;
+                picSelected = false;
+            }
+        }   
+       
+
+        if((textSelected || picSelected) && event.type == 'mousedown'){
             switch(event.target.tagName){
                 case 'IMG':
                     singleResizable($(event.target).parent());
