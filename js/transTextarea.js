@@ -43,7 +43,7 @@ function setConvertDiv(target){
 			var newDiv = processTextToDiv(afterContent);
 			singleDraggable(newDiv);
 
-			//若目前element存在，則不需重新設定style
+			//若目前element存在，則不需重新設定element's tope %&left
 			if(target.exist){
 				newDiv.exist = true;
 			}

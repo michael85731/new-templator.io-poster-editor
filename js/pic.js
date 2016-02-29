@@ -24,3 +24,8 @@ function addPic(event){
 
 	$('.posterArea').append(picContainer);
 }
+
+//改變圖片濾鏡
+function chFilter(filterElement){
+	
+}

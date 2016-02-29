@@ -6,23 +6,23 @@
 <!-- import js & css -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="css/controlPoint.css">
-<link rel="stylesheet" type="text/css" href="css/input.css">
+
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+
 <script type="text/javascript" src="js/transTextarea.js"></script>
 <script type="text/javascript" src="js/draggable.js"></script>
 <script type="text/javascript" src="js/resize.js"></script>
 <script type="text/javascript" src="js/text.js"></script>
 <script type="text/javascript" src="js/pic.js"></script>
 <script type="text/javascript" src="js/textarea.js"></script>
-<script type="text/javascript" src="js/chinese.js"></script>
 
 <!-- ////////////////////////////// CSS //////////////////////////////////////// -->
 
 <style type="text/css">
 
 body{
-    background-color: #E4F1FE
+    background-color: #F6F6D9
 }
 
 .posterArea {
@@ -30,7 +30,7 @@ body{
     width: 500px;
     height: 500px;
     border: 1px solid gray;
-    background-color: #8DC6FF;
+    background-color: #BAD4F9;
 }
 
 .text {
@@ -44,7 +44,7 @@ body{
     position: absolute;
     width: 150px;
     height:150px;
-    border: 1px solid gray;
+    border: 1px solid black;
 }
 
 .input{
@@ -56,6 +56,12 @@ body{
     outline: none;
     box-shadow:none;
     overflow: hidden;
+}
+
+.color{
+    height:50px;
+    width:50px;
+    float:left;
 }
 
 </style>
@@ -74,13 +80,14 @@ body{
 	<div class="text">posterText4<br>posterText4.1</div>
 </div>
 <button onclick="addText()">add Text</button>
-
 <input type="file">
 
-<button onclick="checkchinese('幹')">testing</button>
-<div>others3</div>
-<div>others4</div>
+<div>
+    <input class='color-pick' type="color" style="float:left;">
+</div>
 
+<div style="float:left;clear:both;">others3</div>
+<div style="float:left;clear:both;">others4</div>
 </body>
 
 <!-- //////////////////////// js code //////////////////////////////////// -->
@@ -89,6 +96,12 @@ body{
 
 $(document).ready(function(){
 
+    //text tools event
+    $('.color-pick').on('change',function(event){
+        chColor(event.target);
+    });
+
+    //add pic event
     $("input[type=file]").change(function(){
         loadPic(this);
     });
