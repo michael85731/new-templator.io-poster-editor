@@ -26,7 +26,8 @@ function setTextStyle(target,origin){
 			'height':origin.height,
 			'color':origin.color,
 			'font-size':origin.size,
-			'letter-spacing':origin.letterSpacing});
+			'letter-spacing':origin.letterSpacing,
+			'line-height':origin.lineHeight});
 	}else{
 		$(target).css({'top':150,'left':150,'position':"absolute"});
 	}

@@ -1,4 +1,4 @@
-function Origin(top,left,width,height,text,color,size,letterSpacing){
+function Origin(top,left,width,height,text,color,size,letterSpacing,lineHeight){
 	this.top = top;
 	this.left = left;
 	this.text = text;
@@ -7,4 +7,5 @@ function Origin(top,left,width,height,text,color,size,letterSpacing){
 	this.width = width;
 	this.height = height;
 	this.letterSpacing = letterSpacing;
+	this.lineHeight = lineHeight;
 }

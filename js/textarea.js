@@ -1,14 +1,7 @@
 //設定既有文字的textarea樣式
 function setTextareaStyle(target,origin){
 	$(target).addClass('input');
-	var mostWidth = countTextWidth(origin.text,origin.size);
-	var nowHeight = countTextHeight(origin.text,origin.size);
 
-	//width and rows
-	$(target).width(mostWidth);
-	$(target).height(nowHeight);
-
-	//css
 	$(target).css({
 		'top':origin.top,
 		'left':origin.left,
@@ -16,15 +9,16 @@ function setTextareaStyle(target,origin){
 		'height':origin.height,
 		'color':origin.color,
 		'font-size':origin.size,
-		'letter-spacing':origin.letterSpacing});
+		'letter-spacing':origin.letterSpacing,
+		'line-height':origin.lineHeight});
 }
 
 //當文字增加時，調整textarea樣式並更新origin(因為回復成div text的時候是參考origin)
 function adjustTextarea(target,origin){
 	var newContent = $(target).html().replace(/<br>/g,'\n');
 
-	var mostWidth = countTextWidth(newContent,origin.size);
-	var nowHeight = countTextHeight(newContent,origin.size);
+	var mostWidth = countTextWidth(newContent,origin.size,origin.letterSpacing);
+	var nowHeight = countTextHeight(newContent,origin.size,origin.lineHeight);
 
 	$(target).width(mostWidth);
 	$(target).height(nowHeight);
@@ -35,7 +29,7 @@ function adjustTextarea(target,origin){
 }
 
 //計算width
-function countTextWidth(content,fontSize){
+function countTextWidth(content,fontSize,letterSpacing){
 	var allWidth = [];
 	content = content.split('\n');
 	
@@ -43,6 +37,7 @@ function countTextWidth(content,fontSize){
 		var tempSpan = $('<span />'); 	//利用span計算width
 		$(tempSpan).html(content[i]);
 		$(tempSpan).css('font-size',fontSize);
+		$(tempSpan).css('letter-spacing',letterSpacing);
 		$('body').append(tempSpan);
 		allWidth.push($(tempSpan).innerWidth() + 5);
 		tempSpan.remove();
@@ -52,7 +47,7 @@ function countTextWidth(content,fontSize){
 }
 
 //計算該顯示多少row
-function countTextHeight(content,fontSize){
+function countTextHeight(content,fontSize,lineHeight){
 	var height = 0;
 
 	var tempSpan = $('<span />'); 	//利用span計算height
@@ -60,6 +55,7 @@ function countTextHeight(content,fontSize){
 
 	$(tempSpan).html(content);
 	$(tempSpan).css('font-size',fontSize);
+	$(tempSpan).css('line-height',lineHeight);
 	$('body').append(tempSpan);
 
 	height = $(tempSpan).height();

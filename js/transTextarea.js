@@ -9,7 +9,8 @@ function transToTextarea(target){
 	origin = new Origin($(target).position().top,$(target).position().left
 		,$(target).width(),$(target).height()
 		,$(target).html().replace(/<br>/g,'\n')
-		,$(target).css('color'),$(target).css('font-size'),$(target).css('letter-spacing'));
+		,$(target).css('color'),$(target).css('font-size')
+		,$(target).css('letter-spacing'),$(target).css('line-height'));
 
 	//transform to textarea
 	var editText = $("<textarea />");
