@@ -12,8 +12,8 @@
 
 /*高對比*/
 .lomo{
-	-webkit-filter: contrast(300%); 
-    filter: contrast(300%);
+	-webkit-filter: contrast(200%); 
+    filter: contrast(200%);
 }
 
 /*清晰*/

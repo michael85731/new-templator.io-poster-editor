@@ -1,28 +1,27 @@
-//儲存原先的top,left
-var originTop = 0;
-var originLeft = 0;
+//記錄各式屬性的class
+var origin;
 
 //轉為textarea
 function transToTextarea(target){
 	unResizable(target); 	//取消resize point,避免html()時會取到resize point
 	
-	//紀錄原來element的座標
-	originTop = $(target).position().top;
-	originLeft = $(target).position().left;
-	
+	//紀錄原來element的css
+	origin = new Origin($(target).position().top,$(target).position().left
+		,$(target).width(),$(target).height()
+		,$(target).html().replace(/<br>/g,'\n')
+		,$(target).css('color'),$(target).css('font-size'),$(target).css('letter-spacing'));
+
 	//transform to textarea
-	var originContent = $(target).html();
-	originContent = originContent.replace(/<br>/g,'\n');
 	var editText = $("<textarea />");
 	$(target).replaceWith(editText);	//now target replace to editText
 	
 	//紀錄已經存在於海報，在setTextareaStyle中用於設定element的top,left
 	editText.exist = true;
-	setTextareaStyle(editText,originContent,originTop,originLeft);
+	setTextareaStyle(editText,origin);
 	
 	//set focus
 	$(editText).focus();
-	setLastCharFocus(editText,originContent);	//focus on last character
+	setLastCharFocus(editText,origin.text);	//focus on last character
 
 	setConvertDiv(editText);	//讓目前textarea能轉成div
 }
@@ -47,7 +46,7 @@ function setConvertDiv(target){
 			if(target.exist){
 				newDiv.exist = true;
 			}
-			setTextStyle(newDiv,originTop,originLeft);
+			setTextStyle(newDiv,origin);
 
 			$(target).replaceWith(newDiv);
 		}else{
@@ -56,7 +55,7 @@ function setConvertDiv(target){
 			$(target).html(afterContent);
 			
 			//調整textarea的顯示樣式
-			adjustTextarea(target);
+			adjustTextarea(target,origin);
 		}
 
 	});

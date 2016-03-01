@@ -16,10 +16,17 @@ function addText(){
 }
 
 //處理text css
-function setTextStyle(target,originTop,originLeft){
+function setTextStyle(target,origin){
 	$(target).addClass('text');
 	if(target.exist){
-		$(target).css({'top':originTop,'left':originLeft,'position':"absolute"});
+		$(target).css({
+			'top':origin.top,
+			'left':origin.left,
+			'width':origin.width,
+			'height':origin.height,
+			'color':origin.color,
+			'font-size':origin.size,
+			'letter-spacing':origin.letterSpacing});
 	}else{
 		$(target).css({'top':150,'left':150,'position':"absolute"});
 	}
