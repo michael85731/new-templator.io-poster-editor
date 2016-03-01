@@ -1,15 +1,19 @@
+//記錄原各式屬性的class
+var origin = null;
+
 //當text類型的div觸發resize事件時，能跟著變動text size
 function resizeText(target){
 	nowHeight = $(target).height();
 	nowWidth = $(target).width();
 	
 	//find minimize change and change style
-	var heightDiff = (nowHeight / target.originHeight);
-	var widthDiff = (nowWidth / target.originWidth);
+	var heightDiff = (nowHeight / origin.height);
+	var widthDiff = (nowWidth / origin.width);
 
 	var adjustment = Math.min(heightDiff,widthDiff);
 	var unit = $(target).css("font-size").slice(-2);
-	var result = parseFloat(target.originSize * adjustment) + unit;
+	var result = parseFloat(origin.size.slice(0,-2) * adjustment) + unit;
+
 	if(adjustment != 0){
 		$(target).css("font-size",result);
 	}
@@ -59,12 +63,14 @@ function singleResizable(target){
 		}
 	});
 
-	//record text(div) origin height and width
-	if(typeof(target.originWidth) == 'undefined'){
-		target.originWidth = $(target).width();
-		target.originHeight = $(target).height();
-		target.originSize = parseFloat($(target).css("font-size").slice(0,-2));
+	//record text(div) origin css
+	if(origin == null){
+		origin = new Origin($(target).position().top,$(target).position().left
+		,$(target).width(),$(target).height()
+		,$(target).html().replace(/<br>/g,'\n')
+		,$(target).css('color'),$(target).css('font-size'),$(target).css('letter-spacing'));
 	}
+
 }
 
 //取消resizable，不重複resize point

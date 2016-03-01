@@ -1,4 +1,4 @@
-//記錄各式屬性的class
+//記錄原各式屬性的class
 var origin;
 
 //轉為textarea
