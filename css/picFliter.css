@@ -18,6 +18,6 @@
 
 /*清晰*/
 .clarity{
-	-webkit-filter: brightness(115%) contrast(110%);
-    filter: brightness(115%) contrast(110%);
+	-webkit-filter: brightness(110%) contrast(105%);
+    filter: brightness(110%) contrast(105%);
 }

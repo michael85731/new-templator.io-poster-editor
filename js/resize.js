@@ -12,6 +12,7 @@ function resizeText(target){
 
 	var adjustment = Math.min(heightDiff,widthDiff);
 	var unit = $(target).css("font-size").slice(-2);
+
 	var result = parseFloat(origin.size.slice(0,-2) * adjustment) + unit;
 
 	if(adjustment != 0){
@@ -68,10 +69,9 @@ function singleResizable(target){
 		origin = new Origin($(target).position().top,$(target).position().left
 		,$(target).width(),$(target).height()
 		,$(target).html().replace(/<br>/g,'\n')
-		,$(target).css('color'),$(target).css('font-size'),
-		$(target).css('letter-spacing'),$(target).css('line-height'));
+		,$(target).css('color'),$(target).css('font-size')
+		,$(target).css('letter-spacing'),$(target).css('line-height'));
 	}
-
 }
 
 //取消resizable，不重複resize point

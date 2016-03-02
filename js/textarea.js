@@ -5,7 +5,7 @@ function setTextareaStyle(target,origin){
 	$(target).css({
 		'top':origin.top,
 		'left':origin.left,
-		'width':origin.width,
+		'width':origin.width + 5, 	//讓游標不會跟border太近
 		'height':origin.height,
 		'color':origin.color,
 		'font-size':origin.size,
@@ -39,7 +39,7 @@ function countTextWidth(content,fontSize,letterSpacing){
 		$(tempSpan).css('font-size',fontSize);
 		$(tempSpan).css('letter-spacing',letterSpacing);
 		$('body').append(tempSpan);
-		allWidth.push($(tempSpan).innerWidth() + 5);
+		allWidth.push($(tempSpan).width() + 5);
 		tempSpan.remove();
 	}
 
@@ -51,14 +51,23 @@ function countTextHeight(content,fontSize,lineHeight){
 	var height = 0;
 
 	var tempSpan = $('<span />'); 	//利用span計算height
-	content = content.replace(/\n/g,'<br>s'); //因為span空白時不會計算空行，所以多一個字元使計算空行數量正確
+	content = content.replace(/\n/g,'<br>');
 
-	$(tempSpan).html(content);
+	if(content.slice(-4) == '<br>'){
+		$(tempSpan).html(content + 's'); //計算正確的高度;而因為span空白時不會計算空行，所以多一個字元使計算空行數量正確
+	}else{
+		$(tempSpan).html(content);
+	}
+	
 	$(tempSpan).css('font-size',fontSize);
 	$(tempSpan).css('line-height',lineHeight);
 	$('body').append(tempSpan);
 
-	height = $(tempSpan).height();
+	if(lineHeight.slice(0,-2) > 20){
+		height = $(tempSpan).height() + parseFloat(lineHeight.slice(0,-2) - 20); 	// + 新列高 - 基本列高，讓高度與原本div text一致
+	}else{
+		height = $(tempSpan).height();
+	}
 	tempSpan.remove();
 
 	return height;

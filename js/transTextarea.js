@@ -39,17 +39,7 @@ function setConvertDiv(target){
 
 		//只按enter則變回div
 		if(event.keyCode == 13 && !(event.shiftKey)){
-			var afterContent = $(target).val();
-			var newDiv = processTextToDiv(afterContent);
-			singleDraggable(newDiv);
-
-			//若目前element存在，則不需重新設定element's tope %&left
-			if(target.exist){
-				newDiv.exist = true;
-			}
-			setTextStyle(newDiv,origin);
-
-			$(target).replaceWith(newDiv);
+			toDiv(target);
 		}else{
 			//統一用html()計算
 			var afterContent = $(target).val();
@@ -62,8 +52,23 @@ function setConvertDiv(target){
 	});
 }
 
+function toDiv(target){
+	var afterContent = $(target).html();
+	var newDiv = processText(afterContent);
+	singleDraggable(newDiv);
+
+	//若目前element存在，則不需重新設定element's tope %&left
+	if(target.exist){
+		newDiv.exist = true;
+	}
+
+	setTextStyle(newDiv,origin);
+
+	$(target).replaceWith(newDiv);
+}
+
 //將textarea的內容轉成div
-function processTextToDiv(content){
+function processText(content){
 	var lineBreakNum = 0;
 	if(content.match(/\n/g) != null){	//判斷空行數量
 		lineBreakNum = content.match(/\n/g).length;
