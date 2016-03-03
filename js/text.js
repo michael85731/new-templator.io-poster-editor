@@ -20,6 +20,7 @@ function setTextStyle(target,origin){
 	$(target).addClass('text');
 	if(target.exist){
 		$(target).css({
+			'position':'absolute',
 			'top':origin.top,
 			'left':origin.left,
 			'width':origin.width,

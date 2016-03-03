@@ -4,7 +4,7 @@ var origin;
 //轉為textarea
 function transToTextarea(target){
 	unResizable(target); 	//取消resize point,避免html()時會取到resize point
-	
+
 	//紀錄原來element的css
 	origin = new Origin($(target).position().top,$(target).position().left
 		,$(target).width(),$(target).height()
@@ -54,7 +54,10 @@ function setConvertDiv(target){
 
 function toDiv(target){
 	var afterContent = $(target).html();
-	var newDiv = processText(afterContent);
+	var newDiv = $('<div />');
+	$(target).replaceWith(newDiv);
+
+	$(newDiv).html(processText(afterContent));
 	singleDraggable(newDiv);
 
 	//若目前element存在，則不需重新設定element's tope %&left
@@ -64,7 +67,6 @@ function toDiv(target){
 
 	setTextStyle(newDiv,origin);
 
-	$(target).replaceWith(newDiv);
 }
 
 //將textarea的內容轉成div
@@ -74,7 +76,7 @@ function processText(content){
 		lineBreakNum = content.match(/\n/g).length;
 	}
 	var splitContent = content.split("\n");
-	var newDiv = $('<div></div>');
+
 	var tempContent = "";
 	for(var i = 0;i <= lineBreakNum;i++){	//最後一個不用空行
 		if(i == lineBreakNum){
@@ -83,6 +85,6 @@ function processText(content){
 			tempContent += splitContent[i] + "<br>";
 		}
 	}
-	newDiv.html(tempContent);
-	return newDiv;
+
+	return tempContent;
 }
