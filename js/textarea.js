@@ -1,31 +1,31 @@
 //設定既有文字的textarea樣式
-function setTextareaStyle(target,origin){
+function setTextareaStyle(target){
 	$(target).addClass('input');
 
 	$(target).css({
-		'top':origin.top,
-		'left':origin.left,
-		'width':origin.width + 5, 	//讓游標不會跟border太近
-		'height':origin.height,
-		'color':origin.color,
-		'font-size':origin.size,
-		'letter-spacing':origin.letterSpacing,
-		'line-height':origin.lineHeight});
+		'top':target.origin.top,
+		'left':target.origin.left,
+		'width':target.origin.width + 5, 	//讓游標不會跟border太近
+		'height':target.origin.height,
+		'color':target.origin.color,
+		'font-size':target.origin.size,
+		'letter-spacing':target.origin.letterSpacing,
+		'line-height':target.origin.lineHeight});
 }
 
 //當文字增加時，調整textarea樣式並更新origin(因為回復成div text的時候是參考origin)
-function adjustTextarea(target,origin){
+function adjustTextarea(target){
 	var newContent = $(target).html().replace(/<br>/g,'\n');
 
-	var mostWidth = countTextWidth(newContent,origin.size,origin.letterSpacing);
-	var nowHeight = countTextHeight(newContent,origin.size,origin.lineHeight);
+	var mostWidth = countTextWidth(newContent,target.origin.size,target.origin.letterSpacing);
+	var nowHeight = countTextHeight(newContent,target.origin.size,target.origin.lineHeight);
 
 	$(target).width(mostWidth);
 	$(target).height(nowHeight);
 
-	//update origin
-	origin.width = mostWidth;
-	origin.height = nowHeight;
+	//update target origin
+	target.origin.width = mostWidth;
+	target.origin.height = nowHeight;
 }
 
 //計算width
@@ -71,4 +71,13 @@ function countTextHeight(content,fontSize,lineHeight){
 	tempSpan.remove();
 
 	return height;
+}
+
+//強制將目前的input textarea轉成div text
+function forceToDiv(){
+	if($('.input').length){
+		var lastTextarea = $('.input');
+		lastTextarea.exist = true;
+		toDiv(lastTextarea);
+	}
 }

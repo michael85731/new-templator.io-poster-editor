@@ -78,6 +78,10 @@ body{
     border:1px solid black;
 }
 
+.multipleDrag{
+
+}
+
 </style>
 
 <!-- ///////////////////////////// html /////////////////////////////// -->
@@ -162,13 +166,25 @@ $(document).ready(function(){
         }   
        
         //點到元件要讓該元件能resizable
-        if((textSelected || picSelected) && event.type == 'mousedown'){
+        if((textSelected || picSelected) && event.type == 'mousedown' && !(event.ctrlKey)){
             switch(event.target.tagName){
                 case 'IMG':
                     singleResizable($(event.target).parent());
                     break;
                 case 'DIV':
                     singleResizable(event.target);
+                    break;
+            }
+        }
+
+        //多重element resizable
+        if((textSelected || picSelected) && event.type == 'mousedown' && event.ctrlKey){
+            switch(event.target.tagName){
+                case 'IMG':
+                    multiResizable($(event.target).parent());
+                    break;
+                case 'DIV':
+                    multiResizable(event.target);
                     break;
             }
         }

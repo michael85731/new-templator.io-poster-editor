@@ -5,6 +5,13 @@ function addText(){
 	var newText = $("<textarea />");
 	$(newText).addClass('input');
 	$(newText).css({'top':150,'left':150,'position':"absolute"});
+	
+	//初始化origin
+	newText.origin = new Origin($(newText).position().top,$(newText).position().left
+		,$(newText).width(),$(newText).height()
+		,$(newText).html().replace(/<br>/g,'\n')
+		,$(newText).css('color'),$(newText).css('font-size')
+		,$(newText).css('letter-spacing'),$(newText).css('line-height'));
 
 	//set keyboard event and textarea style
 	setConvertDiv(newText);
@@ -16,19 +23,19 @@ function addText(){
 }
 
 //處理text css
-function setTextStyle(target,origin){
+function setTextStyle(target){
 	$(target).addClass('text');
 	if(target.exist){
 		$(target).css({
 			'position':'absolute',
-			'top':origin.top,
-			'left':origin.left,
-			'width':origin.width,
-			'height':origin.height,
-			'color':origin.color,
-			'font-size':origin.size,
-			'letter-spacing':origin.letterSpacing,
-			'line-height':origin.lineHeight});
+			'top':target.origin.top,
+			'left':target.origin.left,
+			'width':target.origin.width,
+			'height':target.origin.height,
+			'color':target.origin.color,
+			'font-size':target.origin.size,
+			'letter-spacing':target.origin.letterSpacing,
+			'line-height':target.origin.lineHeight});
 	}else{
 		$(target).css({'top':150,'left':150,'position':"absolute"});
 	}
