@@ -23,7 +23,7 @@ function adjustTextarea(target){
 	$(target).width(mostWidth);
 	$(target).height(nowHeight);
 
-	//update target origin
+	//update target's origin
 	target.origin.width = mostWidth;
 	target.origin.height = nowHeight;
 }

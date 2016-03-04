@@ -11,3 +11,9 @@ function singleDraggable(target){
 		containment: ".posterArea"
 	});
 }
+
+//multiple element draggable
+function multiDraggable(){
+	$('.multi').draggable({multiple: true});
+	$('.multi').addClass('ui-selected'); 	//use others jquery plugin condition
+}

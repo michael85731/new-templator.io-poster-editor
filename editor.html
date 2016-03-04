@@ -10,6 +10,7 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
+<script type="text/javascript" src="js/dragMultiple/dist/jquery-ui.drag-multiple.js"></script>
 
 <script type="text/javascript" src="js/transTextarea.js"></script>
 <script type="text/javascript" src="js/draggable.js"></script>
@@ -165,8 +166,8 @@ $(document).ready(function(){
             }
         }   
        
-        //點到元件要讓該元件能resizable
-        if((textSelected || picSelected) && event.type == 'mousedown' && !(event.ctrlKey)){
+        //點到元件要讓該元件能resizable；若目前有multiple選取時則不動作
+        if((textSelected || picSelected) && event.type == 'mousedown' && !(event.ctrlKey) && !($('.multi').length)){
             switch(event.target.tagName){
                 case 'IMG':
                     singleResizable($(event.target).parent());
@@ -177,10 +178,9 @@ $(document).ready(function(){
             }
         }
 
-        //多重element resizable
+        //多重element resizable && draggable
         if((textSelected || picSelected) && event.type == 'mousedown' && event.ctrlKey){
             $('.ui-resizable-handle').parent().addClass('multi');   //辨別目前要reisze的所有元件，加上一個class做判斷
-
             switch(event.target.tagName){
                 case 'IMG':
                     multiResizable($(event.target).parent());
@@ -189,6 +189,8 @@ $(document).ready(function(){
                     multiResizable(event.target);
                     break;
             }
+
+            multiDraggable();
         }
 
         //resizing時的動作

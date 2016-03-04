@@ -7,11 +7,7 @@ function addText(){
 	$(newText).css({'top':150,'left':150,'position':"absolute"});
 	
 	//初始化origin
-	newText.origin = new Origin($(newText).position().top,$(newText).position().left
-		,$(newText).width(),$(newText).height()
-		,$(newText).html().replace(/<br>/g,'\n')
-		,$(newText).css('color'),$(newText).css('font-size')
-		,$(newText).css('letter-spacing'),$(newText).css('line-height'));
+	initElementOrigin(newText);
 
 	//set keyboard event and textarea style
 	setConvertDiv(newText);

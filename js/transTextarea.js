@@ -2,12 +2,8 @@
 function transToTextarea(target){
 	cancelResizableElement(); 	//取消resize point,避免html()時會取到resize point
 
-	//更新原來element的origin
-	target.origin = new Origin($(target).position().top,$(target).position().left
-		,$(target).width(),$(target).height()
-		,$(target).html().replace(/<br>/g,'\n')
-		,$(target).css('color'),$(target).css('font-size')
-		,$(target).css('letter-spacing'),$(target).css('line-height'));
+	//初始化原來element的origin
+	initElementOrigin(target);
 
 	//transform to textarea
 	var editText = $("<textarea />");
@@ -51,6 +47,9 @@ function setConvertDiv(target){
 }
 
 function toDiv(target){
+	//更新原來element的origin，確認不會取不到origin
+	initElementOrigin(target);
+
 	var afterContent = $(target).html();
 	var newDiv = $('<div />');
 	newDiv.origin = target.origin; 	//繼承原element的origin

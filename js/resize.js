@@ -97,7 +97,12 @@ function resizable(target){
 
 //取消resizable element
 function cancelResizableElement(){
-	$(".ui-resizable-handle").parent().resizable('destroy');
-	$('.posterArea').remove(".ui-resizable-handle");
-	$('.multi').removeClass('multi'); 	//取消一起resize的判斷class
+	try{
+		$(".ui-resizable-handle").parent().resizable('destroy'); 	//新加的element會沒有resizable，所以用try避免出現錯誤
+		$('.posterArea').remove(".ui-resizable-handle");
+		$('.multi').removeClass('ui-selected'); 	//取消一起resize的判斷class
+		$('.multi').removeClass('multi'); 	//取消一起resize的判斷class
+	}catch(err){
+		//do nothing
+	}
 }
