@@ -18,6 +18,7 @@
 <script type="text/javascript" src="js/pic.js"></script>
 <script type="text/javascript" src="js/textarea.js"></script>
 <script type="text/javascript" src="js/Origin.js"></script>
+<script type="text/javascript" src="js/keyboard.js"></script>
 
 <!-- ////////////////////////////// CSS //////////////////////////////////////// -->
 
@@ -90,7 +91,7 @@ body{
 	<div class="text">posterText1</div>
 	<div class="text">posterText2</div>
 	<div class="text">posterText3</div>
-	<div class="text" id="testing">posterText4<br>posterText4.1</div>
+	<div class="text">posterText4<br>posterText4.1</div>
 </div>
 <br>
 <div class="tools">
@@ -146,7 +147,7 @@ $(document).ready(function(){
 
     //posterArea's event setting
     draggableAll();
-    $(".posterArea").on('dblclick mousedown resize click',function(event){
+    $(".posterArea").on('dblclick mousedown resize click keypress',function(event){
 
         //更新目前選取的element
         if($(event.target).attr('class') != 'posterArea'){  //不能選到自己
@@ -160,7 +161,7 @@ $(document).ready(function(){
             }
         }   
        
-
+        //點到元件要讓該元件能resizable
         if((textSelected || picSelected) && event.type == 'mousedown'){
             switch(event.target.tagName){
                 case 'IMG':
@@ -172,6 +173,7 @@ $(document).ready(function(){
             }
         }
 
+        //resizing時的動作
         if(event.type == 'resize'){
             switch($(event.target).hasClass('text')){
                 case true:
@@ -181,12 +183,37 @@ $(document).ready(function(){
             }
         }
 
+        //dblclick要將div text轉成textarea
         if(event.type == 'dblclick' && $(event.target).hasClass('text')){
             transToTextarea(event.target);
         }
 
+        //若滑鼠點到poster背景，則取消所有resizable element，並將textarea轉成div text
         if($(event.target).hasClass('posterArea')){
             cancelResizableElement();
+            if($('.input').length){
+                var lastTextarea = $('.input');
+                lastTextarea.exist = true;
+                toDiv(lastTextarea);
+            }
+        }
+    });
+
+    //鍵盤事件區
+    $(document).on('keydown',function(event){
+        //delete
+        if(event.keyCode == 46){
+            $('.ui-resizable-handle').parent().remove();
+        }
+
+        //copy
+        if(event.ctrlKey && event.keyCode == 67){
+            copy();
+        }
+
+        //paste
+        if(event.ctrlKey && event.keyCode == 86){
+            paste();
         }
 
     });

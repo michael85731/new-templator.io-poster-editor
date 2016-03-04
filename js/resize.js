@@ -33,7 +33,13 @@ function resizePic(target){
 
 //讓文字變成resizable
 function singleResizable(target){
-	unResizable(target);	//避免重複新增control point
+	//避免重複新增control point，以及將目前仍為textarea的element轉成div text
+	unResizable(target);
+	if($('.input').length){
+		var lastTextarea = $('.input');
+		lastTextarea.exist = true;
+		toDiv(lastTextarea);
+	}
 
 	var direction = ["nw","ne","sw","se","n","s","e","w"];
 	
