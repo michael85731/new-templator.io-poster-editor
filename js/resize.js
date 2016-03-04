@@ -1,3 +1,5 @@
+/*reszie都是根據原本的物件來resizing，所以resize結束後不會更新origin*/
+
 //當text類型的div觸發resize事件時，能跟著變動text size
 function resizeText(target){
 	nowHeight = $(target).height();
@@ -31,13 +33,8 @@ function resizePic(target){
 //讓taget變成resizable
 function singleResizable(target){
 
-	//避免重複resizable，以及將目前仍為textarea的element轉成div text
-	$('.ui-resizable-handle').remove();
-	try{
-		$(target).resizable('destroy');
-	}catch(err){
-		//do nothing
-	}
+	//移除所有resizable element，避免重複resizable，以及將目前仍為textarea的element轉成div text
+	cancelResizableElement();
 	forceToDiv();
 
 	resizable(target);
@@ -45,19 +42,13 @@ function singleResizable(target){
 
 //讓多個taget變成resizable
 function multiResizable(target){
+	$(target).addClass('multi');
 	forceToDiv();
 
 	//若已被選過的則取消選取
 	if($(target).children('.ui-resizable-handle').length){
 		$(target).children().remove('.ui-resizable-handle');	
 	}else{
-		//若之前有選過則會有resizable，先取消再加上才不會有bug
-		try{
-			$(target).resizable('destroy');
-		}catch(err){
-			//do nothing
-		}
-
 		resizable(target);
 	}
 }
@@ -80,6 +71,7 @@ function resizable(target){
 	}
 
 	$(target).resizable({
+		alsoResize: '.multi',
 		containment: ".posterArea",
 		handles:{
 			'nw': '#nwgrip',
@@ -93,7 +85,7 @@ function resizable(target){
 		}
 	});
 
-	//record text(div) target.origin css
+	//record text(div) target.origin css, and make sure target.origin won't update
 	if(target.origin == null){
 		target.origin = new Origin($(target).position().top,$(target).position().left
 		,$(target).width(),$(target).height()
@@ -101,11 +93,11 @@ function resizable(target){
 		,$(target).css('color'),$(target).css('font-size')
 		,$(target).css('letter-spacing'),$(target).css('line-height'));
 	}
-
 }
 
 //取消resizable element
 function cancelResizableElement(){
 	$(".ui-resizable-handle").parent().resizable('destroy');
 	$('.posterArea').remove(".ui-resizable-handle");
+	$('.multi').removeClass('multi'); 	//取消一起resize的判斷class
 }

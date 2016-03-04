@@ -95,7 +95,7 @@ body{
 	<div class="text">posterText1</div>
 	<div class="text">posterText2</div>
 	<div class="text">posterText3</div>
-	<div class="text">posterText4<br>posterText4.1</div>
+	<div class="text" id="testing">posterText4<br>posterText4.1</div>
 </div>
 <br>
 <div class="tools">
@@ -179,6 +179,8 @@ $(document).ready(function(){
 
         //多重element resizable
         if((textSelected || picSelected) && event.type == 'mousedown' && event.ctrlKey){
+            $('.ui-resizable-handle').parent().addClass('multi');   //辨別目前要reisze的所有元件，加上一個class做判斷
+
             switch(event.target.tagName){
                 case 'IMG':
                     multiResizable($(event.target).parent());
@@ -191,11 +193,23 @@ $(document).ready(function(){
 
         //resizing時的動作
         if(event.type == 'resize'){
-            switch($(event.target).hasClass('text')){
-                case true:
-                    resizeText(event.target);
-                case false:
-                    resizePic(event.target);
+            //一起resize時跟單element resize時不同，分開處理
+            if($('.multi').length){
+                $('.multi').each(function(){
+                    switch($(this).hasClass('text')){
+                        case true:
+                            resizeText(this);
+                        case false:
+                            resizePic(this);
+                    }
+                });
+            }else{
+                switch($('.ui-resizable-handle').parent().hasClass('text')){
+                    case true:
+                        resizeText(event.target);
+                    case false:
+                        resizePic(event.target);
+                }
             }
         }
 

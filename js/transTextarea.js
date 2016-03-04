@@ -2,7 +2,7 @@
 function transToTextarea(target){
 	cancelResizableElement(); 	//取消resize point,避免html()時會取到resize point
 
-	//紀錄原來element的css
+	//更新原來element的origin
 	target.origin = new Origin($(target).position().top,$(target).position().left
 		,$(target).width(),$(target).height()
 		,$(target).html().replace(/<br>/g,'\n')
