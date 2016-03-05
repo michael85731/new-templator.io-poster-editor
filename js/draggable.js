@@ -1,5 +1,8 @@
 //讓所有posterArea裡面的原件都能draggable
 function draggableAll(){
+	$('.posterArea').children('div').on('drag',function(event,ui){
+		smartDragLine(event.target);
+	});
 	$(".posterArea").children("div").draggable();
 }
 

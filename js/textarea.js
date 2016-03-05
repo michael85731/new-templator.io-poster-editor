@@ -5,7 +5,7 @@ function setTextareaStyle(target){
 	$(target).css({
 		'top':target.origin.top,
 		'left':target.origin.left,
-		'width':target.origin.width + 7, 	//讓游標不會跟border太近
+		'width':target.origin.width + 5, 	//讓游標不會跟border太近
 		'height':target.origin.height,
 		'color':target.origin.color,
 		'font-size':target.origin.size,
@@ -39,7 +39,7 @@ function countTextWidth(content,fontSize,letterSpacing){
 		$(tempSpan).css('font-size',fontSize);
 		$(tempSpan).css('letter-spacing',letterSpacing);
 		$('body').append(tempSpan);
-		allWidth.push($(tempSpan).width() + 7);
+		allWidth.push($(tempSpan).width() + 5);
 		tempSpan.remove();
 	}
 
