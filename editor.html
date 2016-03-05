@@ -10,7 +10,6 @@
 
 <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
 <script type="text/javascript" src="http://code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-<script type="text/javascript" src="js/dragMultiple/dist/jquery-ui.drag-multiple.js"></script>
 
 <script type="text/javascript" src="js/transTextarea.js"></script>
 <script type="text/javascript" src="js/draggable.js"></script>
@@ -79,10 +78,6 @@ body{
     border:1px solid black;
 }
 
-.multipleDrag{
-
-}
-
 </style>
 
 <!-- ///////////////////////////// html /////////////////////////////// -->
@@ -91,7 +86,6 @@ body{
 
 <div>others1</div>
 <div>others2</div>
-<!-- id will replace to class(poster area css) -->
 <div class="posterArea">
 	<div class="text">posterText1</div>
 	<div class="text">posterText2</div>
@@ -190,7 +184,7 @@ $(document).ready(function(){
                     break;
             }
 
-            multiDraggable();
+            multiDraggable(event.target);
         }
 
         //resizing時的動作
