@@ -41,12 +41,12 @@ function singleResizable(target){
 }
 
 //讓多個taget變成resizable
-function multiResizable(target){
+function multiResizable(target,multipleChoose){
 	$(target).addClass('multi');
 	forceToDiv();
 
-	//若已被選過的則取消選取
-	if($(target).children('.ui-resizable-handle').length){
+	//若按到已被選過的element，或對element按下ctrl鍵，則取消選取
+	if($(target).children('.ui-resizable-handle').length && ($(target).children('.ui-resizable-handle').length || multipleChoose)){
 		$(target).children().remove('.ui-resizable-handle');
 		$(target).removeClass('multi');		
 	}else{
@@ -101,7 +101,6 @@ function cancelResizableElement(){
 	try{
 		$(".ui-resizable-handle").parent().resizable('destroy'); 	//新加的element會沒有resizable，所以用try避免出現錯誤
 		$('.posterArea').remove(".ui-resizable-handle");
-		$('.multi').removeClass('ui-selected'); 	//取消一起resize的判斷class
 		$('.multi').removeClass('multi'); 	//取消一起resize的判斷class
 	}catch(err){
 		//do nothing

@@ -159,9 +159,9 @@ $(document).ready(function(){
                 picSelected = false;
             }
         }   
-       
-        //點到元件要讓該元件能resizable；若目前有multiple選取時則不動作
-        if((textSelected || picSelected) && event.type == 'mousedown' && !(event.ctrlKey) && !($('.multi').length)){
+
+        //點到元件要讓該元件能resizable，並取消其他multi class element
+        if((textSelected || picSelected) && event.type == 'mousedown' && !(event.ctrlKey) && !($(event.target).hasClass('multi'))){
             switch(event.target.tagName){
                 case 'IMG':
                     singleResizable($(event.target).parent());
@@ -184,7 +184,7 @@ $(document).ready(function(){
                     break;
             }
 
-            multiDraggable();
+            multiDraggable();   //若再次點到multi class element即可直接draggable，因為前一次點到element時就設定了
         }
 
         //resizing時的動作
