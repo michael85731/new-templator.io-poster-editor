@@ -47,7 +47,8 @@ function multiResizable(target){
 
 	//若已被選過的則取消選取
 	if($(target).children('.ui-resizable-handle').length){
-		$(target).children().remove('.ui-resizable-handle');	
+		$(target).children().remove('.ui-resizable-handle');
+		$(target).removeClass('multi');		
 	}else{
 		resizable(target);
 	}
