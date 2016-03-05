@@ -23,8 +23,8 @@ function multiDraggable(){
 				offsetTop = ui.position.top - event.target.origin.top;
 				offsetLeft = ui.position.left - event.target.origin.left;
 				$('.multi').each(function(){
-					$(this).css('top',parseFloat(this.origin.top) + offsetTop);
-					$(this).css('left',parseFloat(this.origin.left) + offsetLeft);
+					$(this).css('top',this.origin.top + offsetTop);
+					$(this).css('left',this.origin.left + offsetLeft);
 				});
 				break;
 		}
