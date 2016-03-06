@@ -10,13 +10,12 @@ var smartWidth = [];
 var smartHeight = [];
 //參考線距離
 var smartDistance = 20;
+//參考的div要是global，不然會無法刪除
+var smartDiv = $('<div />');
 
 //drag型智慧型參考線
 function smartDragLine(target){
 	getData();
-
-	//紀錄哪個smart區間被觸發
-	var which = '';
 
 	//刪除自己，確認比對資料不含自己的內容
 	var selfTopIndex = allTop.indexOf($(target).css('top'));
@@ -32,8 +31,28 @@ function smartDragLine(target){
 	var isTopSmart = checkSmart('top',target);
 	var isLeftSmart = checkSmart('left',target);
 	
-	// return isTopSmart;
-	return isLeftSmart;
+	//generate same object but has the particular top
+	initElementOrigin(target);
+	smartDiv.html($(target).html());
+	smartDiv.exist = true;
+	smartDiv.origin = target.origin;
+	setTextStyle(smartDiv);
+	singleDraggable(smartDiv);
+	// $('.posterArea').append(smartDiv);
+
+	if(isLeftSmart.hide){
+		console.log('now left is match with one element');
+		$(target).css('visibility','hidden');
+		$(smartDiv).css(isLeftSmart.which,isLeftSmart.match);
+	}else if(isTopSmart.hide){
+		console.log('now top is match with one element');
+		$(target).css('visibility','hidden');
+		$(smartDiv).css(isTopSmart.which,isTopSmart.match);
+	}else{
+		console.log('nothgin match now');
+		$(target).css('visibility','visible');
+		$(smartDiv).remove();
+	}
 }
 
 //取得目前所有元件的資料
@@ -105,7 +124,8 @@ function buildSmartLine(data,which){
 }
 
 function checkSmart(condition,target){
-	var match = 0;	//真正match某元件的值
+	var which = '';		//紀錄哪個smart區間被觸發
+	var match = 0;		//真正match某元件的值
 	var hide = false; 	//是否隱藏origin element
 
 	switch(condition){
