@@ -1,12 +1,13 @@
-//讓所有posterArea裡面的原件都能draggable
-var smartNum = 0;
+//參考的div要是global，不然會無法刪除
 var smartDiv = $('<div />');
 
+//讓所有posterArea裡面的原件都能draggable
 function draggableAll(){
 	$('.posterArea').children('div').on('drag',function(event,ui){
 		var result = smartDragLine(event.target);
 
-		if(result.hide && smartNum == 0){
+		if(result.hide){
+			$(event.target).css('visibility','hidden');
 			//generate same object but has the particular top
 			initElementOrigin(event.target);
 			smartDiv.html($(event.target).html());
@@ -14,11 +15,10 @@ function draggableAll(){
 			smartDiv.origin = event.target.origin;
 			setTextStyle(smartDiv);
 			singleDraggable(smartDiv);
-			$(smartDiv).css('top',result.match);
-
+			$(smartDiv).css(result.which,result.match);
 			$('.posterArea').append(smartDiv);
-			// smartNum++;
 		}else{
+			$(event.target).css('visibility','visible');
 			$(smartDiv).remove();
 		}
 
