@@ -21,10 +21,12 @@ function smartDragLine(target){
 	buildSmartLine(allTop);
 
 	var now = parseFloat($(target).css('top').slice(0,-2));
+	var match = 0;
 	var hide = false;
 	//確認是否在其中一個smartLine裡面，有的話才隱形
 	for(var i = 0;i < smartTop.length;i++){
 		if(now >= smartTop[i][0] && now <= smartTop[i][1]){
+			match = smartTop[i][0] + 15; 	//取得真正符合的資料
 			hide = true;
 			break;
 		}else{
@@ -37,6 +39,8 @@ function smartDragLine(target){
 	}else{
 		$(target).css('visibility','visible');
 	}
+
+	return {'hide':hide,'match':match};
 }
 
 //取得目前所有元件的資料
@@ -66,8 +70,8 @@ function buildSmartLine(data){
 	//build smartTop sector
 	for(var i = 0;i < data.length;i++){
 		smartTop.push([]);
-		smartTop[i].push(parseFloat(data[i].slice(0,-2)) - 50);
-		smartTop[i].push(parseFloat(data[i].slice(0,-2)) + 50);
+		smartTop[i].push(parseFloat(data[i].slice(0,-2)) - 15);
+		smartTop[i].push(parseFloat(data[i].slice(0,-2)) + 15);
 	}
 
 }

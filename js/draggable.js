@@ -1,7 +1,27 @@
 //讓所有posterArea裡面的原件都能draggable
+var smartNum = 0;
+var smartDiv = $('<div />');
+
 function draggableAll(){
 	$('.posterArea').children('div').on('drag',function(event,ui){
-		smartDragLine(event.target);
+		var result = smartDragLine(event.target);
+
+		if(result.hide && smartNum == 0){
+			//generate same object but has the particular top
+			initElementOrigin(event.target);
+			smartDiv.html($(event.target).html());
+			smartDiv.exist = true;
+			smartDiv.origin = event.target.origin;
+			setTextStyle(smartDiv);
+			singleDraggable(smartDiv);
+			$(smartDiv).css('top',result.match);
+
+			$('.posterArea').append(smartDiv);
+			// smartNum++;
+		}else{
+			$(smartDiv).remove();
+		}
+
 	});
 	$(".posterArea").children("div").draggable();
 }

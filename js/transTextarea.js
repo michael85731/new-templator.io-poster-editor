@@ -50,12 +50,13 @@ function toDiv(target){
 	//更新原來element的origin，確認不會取不到origin
 	initElementOrigin(target);
 
-	var afterContent = $(target).html();
+	var content = $(target).html().replace(/\n/,'<br>'); 	//因為div只能讀<br>,所以將textarea中的\n換成<br>
+	
 	var newDiv = $('<div />');
 	newDiv.origin = target.origin; 	//繼承原element的origin
 	$(target).replaceWith(newDiv);
 
-	$(newDiv).html(processText(afterContent));
+	$(newDiv).html(content);
 	singleDraggable(newDiv);
 
 	//若目前element存在，則不需重新設定element's tope %&left
@@ -65,24 +66,4 @@ function toDiv(target){
 
 	setTextStyle(newDiv);
 
-}
-
-//將textarea的內容轉成div
-function processText(content){
-	var lineBreakNum = 0;
-	if(content.match(/\n/g) != null){	//判斷空行數量
-		lineBreakNum = content.match(/\n/g).length;
-	}
-	var splitContent = content.split("\n");
-
-	var tempContent = "";
-	for(var i = 0;i <= lineBreakNum;i++){	//最後一個不用空行
-		if(i == lineBreakNum){
-			tempContent += splitContent[i];
-		}else{
-			tempContent += splitContent[i] + "<br>";
-		}
-	}
-
-	return tempContent;
 }
