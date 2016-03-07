@@ -31,26 +31,23 @@ function smartDragLine(target){
 	var isTopSmart = checkSmart('top',target);
 	var isLeftSmart = checkSmart('left',target);
 	
-	//generate same object but has the particular top
-	initElementOrigin(target);
-	smartDiv.html($(target).html());
-	smartDiv.exist = true;
-	smartDiv.origin = target.origin;
-	setTextStyle(smartDiv);
-	singleDraggable(smartDiv);
-	// $('.posterArea').append(smartDiv);
-
+	//符合某個區間時的設定
 	if(isLeftSmart.hide){
-		console.log('now left is match with one element');
+		createSmart(target);
+		//left相同
 		$(target).css('visibility','hidden');
 		$(smartDiv).css(isLeftSmart.which,isLeftSmart.match);
+		$(smartDiv).css('visibility','visible');
 	}else if(isTopSmart.hide){
-		console.log('now top is match with one element');
+		createSmart(target);
+		//top相同
 		$(target).css('visibility','hidden');
 		$(smartDiv).css(isTopSmart.which,isTopSmart.match);
+		$(smartDiv).css('visibility','visible');
 	}else{
-		console.log('nothgin match now');
+		//都不符合
 		$(target).css('visibility','visible');
+		$(smartDiv).css('visibility','hidden');
 		$(smartDiv).remove();
 	}
 }
@@ -64,10 +61,12 @@ function getData(){
 	allHeight = [];
 	
 	$('.posterArea').children('div').each(function(){
-		allTop.push($(this).css('top'));
-		allLeft.push($(this).css('left'));
-		allWidth.push($(this).width());
-		allHeight.push($(this).height());
+		if(!($(this).hasClass('smart'))){ 	//不能取到smart元素，因smart element只是輔助
+			allTop.push($(this).css('top'));
+			allLeft.push($(this).css('left'));
+			allWidth.push($(this).width());
+			allHeight.push($(this).height());
+		}
 	})
 }
 
@@ -161,4 +160,36 @@ function checkSmart(condition,target){
 			break;
 	}
 
+}
+
+//generate same object with event.target but has the particular top
+function createSmart(target){
+	initElementOrigin(target);
+	smartDiv.html($(target).html());
+	smartDiv.exist = true;
+	smartDiv.addClass('smart');
+	smartDiv.origin = target.origin;
+	setTextStyle(smartDiv);
+
+	$('.posterArea').append(smartDiv);
+}
+
+//若使用者mouseup時，刪除dragging物件，並產生跟smartDiv一模一樣的物件新增到posterArea中
+function eliminateOrigin(){
+	$('.posterArea').children('div').each(function(){
+		if($(this).css('visibility') == 'hidden'){
+			var newElement = $('<div />');
+			initElementOrigin(smartDiv);
+			newElement.html($(smartDiv).html());
+			newElement.exist = true;
+			newElement.origin = smartDiv.origin;
+			setTextStyle(newElement);
+			singleDraggable(newElement);
+			singleResizable(newElement);
+
+			$('.posterArea').append(newElement);
+			$(this).remove();
+			$(smartDiv).remove();
+		}
+	});
 }

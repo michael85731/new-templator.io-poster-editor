@@ -79,6 +79,10 @@ body{
     border:1px solid black;
 }
 
+.smart{
+    border:1px solid red;
+}
+
 </style>
 
 <!-- ///////////////////////////// html /////////////////////////////// -->
@@ -147,7 +151,7 @@ $(document).ready(function(){
 
     //posterArea's event setting
     draggableAll();
-    $(".posterArea").on('dblclick mousedown resize click keypress',function(event){
+    $(".posterArea").on('dblclick mousedown resize click keypress mouseup',function(event){
 
         //更新目前選取的element
         if($(event.target).attr('class') != 'posterArea'){  //不能選到自己
@@ -223,6 +227,11 @@ $(document).ready(function(){
                 lastTextarea.exist = true;
                 toDiv(lastTextarea);
             }
+        }
+
+        //若dragging結束後有物件為hidden，則刪除該物件(處理drag event)
+        if(event.type == 'mouseup'){
+            eliminateOrigin();
         }
     });
 

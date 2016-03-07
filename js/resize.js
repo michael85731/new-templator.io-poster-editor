@@ -32,7 +32,6 @@ function resizePic(target){
 
 //讓taget變成resizable
 function singleResizable(target){
-
 	//移除所有resizable element，避免重複resizable，以及將目前仍為textarea的element轉成div text
 	cancelResizableElement();
 	forceToDiv();
@@ -55,6 +54,7 @@ function multiResizable(target){
 }
 
 function resizable(target){
+
 	var direction = ["nw","ne","sw","se","n","s","e","w"];
 	
 	//create control point
@@ -72,7 +72,6 @@ function resizable(target){
 
 	$(target).resizable({
 		alsoResize: '.multi',
-		containment: ".posterArea",
 		handles:{
 			'nw': '#nwgrip',
 			'ne': '#negrip',
@@ -98,8 +97,8 @@ function resizable(target){
 //取消resizable element
 function cancelResizableElement(){
 	try{
-		$(".ui-resizable-handle").parent().resizable('destroy'); 	//新加的element會沒有resizable，所以用try避免出現錯誤
-		$('.posterArea').remove(".ui-resizable-handle");
+		$('.ui-resizable-handle').parent().resizable('destroy'); 	//新加的element會沒有resizable，所以用try避免出現錯誤
+		$('.ui-resizable-handle').remove();
 		$('.multi').removeClass('multi'); 	//取消一起resize的判斷class
 	}catch(err){
 		//do nothing

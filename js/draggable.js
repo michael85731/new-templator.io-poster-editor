@@ -8,6 +8,9 @@ function draggableAll(){
 
 //讓新產生的div能有draggable的效果
 function singleDraggable(target){
+	$(target).on('drag',function(event,ui){
+		smartDragLine(event.target);
+	});
 	$(target).draggable();
 }
 
