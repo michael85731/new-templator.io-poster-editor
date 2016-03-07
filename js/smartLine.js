@@ -178,11 +178,15 @@ function createSmart(target){
 function eliminateOrigin(){
 	$('.posterArea').children('div').each(function(){
 		if($(this).css('visibility') == 'hidden'){
-			var newElement = $('<div />');
-			initElementOrigin(smartDiv);
-			newElement.html($(smartDiv).html());
+			//清掉resize point
+			var newElement = $(smartDiv).clone();
+			$(newElement).children().remove('.ui-resizable-handle');
+
+			//取得目前smartDiv的css
+			initElementOrigin(newElement);
 			newElement.exist = true;
-			newElement.origin = smartDiv.origin;
+			$(newElement).removeClass('smart');
+
 			setTextStyle(newElement);
 			singleDraggable(newElement);
 			singleResizable(newElement);

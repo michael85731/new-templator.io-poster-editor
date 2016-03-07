@@ -2,6 +2,10 @@
 
 //當text類型的div觸發resize事件時，能跟著變動text size
 function resizeText(target){
+	if(target.origin == null){ 	//當有smartDrag發生，就會因為jquery的關係而沒有origin
+		initElementOrigin(target);
+	}
+
 	nowHeight = $(target).height();
 	nowWidth = $(target).width();
 	
@@ -21,6 +25,10 @@ function resizeText(target){
 
 //當IMG觸發resize事件時，能跟著變動pic size
 function resizePic(target){
+	if(target.origin == null){ 	//當有smartDrag發生，就會因為jquery的關係而沒有origin
+		initElementOrigin(target);
+	}
+
 	nowHeight = $(target).height();
 	nowWidth = $(target).width();
 
