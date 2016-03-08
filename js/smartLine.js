@@ -180,6 +180,7 @@ function eliminateOrigin(){
 		if($(this).css('visibility') == 'hidden'){
 			//清掉resize point
 			var newElement = $(smartDiv).clone();
+			$('.posterArea').append(newElement); 	//要先append上去才能抓到top跟left
 			$(newElement).children().remove('.ui-resizable-handle');
 
 			//取得目前smartDiv的css
@@ -191,7 +192,6 @@ function eliminateOrigin(){
 			singleDraggable(newElement);
 			singleResizable(newElement);
 
-			$('.posterArea').append(newElement);
 			$(this).remove();
 			$(smartDiv).remove();
 		}

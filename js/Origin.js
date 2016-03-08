@@ -11,7 +11,7 @@ function Origin(top,left,width,height,text,color,size,letterSpacing,lineHeight){
 }
 
 function initElementOrigin(target){
-	target.origin = new Origin($(target).css('top'),$(target).css('left')
+	target.origin = new Origin($(target).position().top,$(target).position().left
 		,$(target).width(),$(target).height()
 		,$(target).html().replace(/<br>/g,'\n')
 		,$(target).css('color'),$(target).css('font-size')

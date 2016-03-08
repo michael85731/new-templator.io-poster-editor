@@ -47,9 +47,6 @@ function setConvertDiv(target){
 }
 
 function toDiv(target){
-	//更新原來element的origin，確認不會取不到origin
-	initElementOrigin(target);
-
 	var content = $(target).html().replace(/\n/,'<br>'); 	//因為div只能讀<br>,所以將textarea中的\n換成<br>
 	
 	var newDiv = $('<div />');

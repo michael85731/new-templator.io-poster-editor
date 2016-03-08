@@ -28,8 +28,9 @@ function multiDraggable(){
 				//計算與原本位置的offset，並設定參數為原本的top,left再加上offset
 				offsetTop = ui.position.top - event.target.origin.top;
 				offsetLeft = ui.position.left - event.target.origin.left;
+
 				$('.multi').each(function(){
-					$(this).css('top',this.origin.top + offsetTop);
+					$(this).css('top',this.origin.top + offsetTop); 	//this有origin是因為在multiResizable中已經透過resizable設定過了
 					$(this).css('left',this.origin.left + offsetLeft);
 				});
 				break;
