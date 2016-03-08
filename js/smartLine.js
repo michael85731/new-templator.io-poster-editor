@@ -12,6 +12,7 @@ var smartHeight = [];
 var smartDistance = 20;
 //參考的div要是global，不然會無法刪除
 var smartDiv = $('<div />');
+$(smartDiv).css('position','absolute'); 	//沒設定會無法指定top,left
 
 //drag型智慧型參考線
 function smartDragLine(target){
@@ -34,27 +35,41 @@ function smartDragLine(target){
 	//符合某個區間時的設定
 	if(isLeftSmart.hide){
 		createSmart(target);
+		
 		//left相同
 		$(target).css('visibility','hidden');
 		$(smartDiv).css(isLeftSmart.which,isLeftSmart.match);
 		$(smartDiv).css('visibility','visible');
+		
+		$('.multi').each(function(){
+			var offset = $(smartDiv).position().top - smartDiv.origin.top;
+			$(this).css('top',this.origin.top + offset);
+		});
+
 	}else if(isTopSmart.hide){
 		createSmart(target);
 		//top相同
 		$(target).css('visibility','hidden');
 		$(smartDiv).css(isTopSmart.which,isTopSmart.match);
 		$(smartDiv).css('visibility','visible');
+
+		$('.multi').each(function(){
+			var offset = $(smartDiv).position().left - smartDiv.origin.left;
+			$(this).css('left',this.origin.left + offset);
+		});
+
 	}else{
 		//都不符合
 		$(target).css('visibility','visible');
 		$(smartDiv).css('visibility','hidden');
 		$(smartDiv).remove();
+		return true;
 	}
 }
 
 //取得目前所有元件的資料
 function getData(){
-	//清除先前資料
+	//清除先前資料，因為elemnt會有變動
 	allTop = [];
 	allLeft = [];
 	allWidth = [];
@@ -164,15 +179,19 @@ function checkSmart(condition,target){
 
 //generate same object with event.target but has the particular top
 function createSmart(target){
-	initElementOrigin(target);
+	//不更新smartDiv，因為要計算offset；也不能在這邊更新target，因為dragging時要參考原來的位置計算offset
+	$(smartDiv).css('top',$(target).position().top);
+	$(smartDiv).css('left',$(target).position().left);
+	$(smartDiv).css('width',$(target).css('width'));
+	$(smartDiv).css('height',$(target).css('height'));
+
 	smartDiv.html($(target).html());
 	smartDiv.exist = true;
 	smartDiv.addClass('smart');
-	smartDiv.origin = target.origin;
-	setTextStyle(smartDiv);
 
 	if(!($('.posterArea').children('div').hasClass('smart'))){ 	//若目前已經有smartDiv存在則不需要再新增(已經在smart區間)
 		$('.posterArea').append(smartDiv);
+		initElementOrigin(smartDiv); //紀錄smartDiv的原位置
 	}
 }
 
@@ -180,17 +199,16 @@ function createSmart(target){
 function eliminateOrigin(){
 	$('.posterArea').children('div').each(function(){
 		if($(this).css('visibility') == 'hidden'){
-			//清掉resize point
+			//清掉resize point並加到posterArea中
 			var newElement = $(smartDiv).clone();
-			$('.posterArea').append(newElement); 	//要先append上去才能抓到top跟left，可能跟jquery clone有關
+			$('.posterArea').append(newElement);
 			$(newElement).children().remove('.ui-resizable-handle');
 
-			//取得目前smartDiv的css
-			initElementOrigin(newElement);
+			//set css class
 			newElement.exist = true;
 			$(newElement).removeClass('smart');
+			$(newElement).addClass('text');
 
-			setTextStyle(newElement);
 			singleDraggable(newElement);
 			singleResizable(newElement);
 

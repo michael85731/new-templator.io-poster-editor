@@ -61,6 +61,6 @@ function toDiv(target){
 		newDiv.exist = true;
 	}
 
-	setTextStyle(newDiv);
+	setOriginTextStyle(newDiv);
 
 }

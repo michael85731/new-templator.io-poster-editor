@@ -19,7 +19,7 @@ function addText(){
 }
 
 //處理text css
-function setTextStyle(target){
+function setOriginTextStyle(target){
 	$(target).addClass('text');
 	if(target.exist){
 		$(target).css({

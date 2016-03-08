@@ -22,17 +22,20 @@ function multiDraggable(){
 	$('.multi').on('drag dragcreate',function(event,ui){
 		switch(event.type){
 			case 'dragcreate':
-				initElementOrigin(event.target); 	//initicialize紀錄origin
+				initElementOrigin(event.target); 	//initicialize target's origin
 				break;
 			case 'drag':
-				//計算與原本位置的offset，並設定參數為原本的top,left再加上offset
-				offsetTop = ui.position.top - event.target.origin.top;
-				offsetLeft = ui.position.left - event.target.origin.left;
+				var smartCheck = smartDragLine(event.target);
 
-				$('.multi').each(function(){
-					$(this).css('top',this.origin.top + offsetTop); 	//this有origin是因為在multiResizable中已經透過resizable設定過了
-					$(this).css('left',this.origin.left + offsetLeft);
-				});
+				if(smartCheck){
+					//計算與原本位置的offset，並設定參數為原本的top,left再加上offset
+					offsetTop = ui.position.top - event.target.origin.top;
+					offsetLeft = ui.position.left - event.target.origin.left;
+					$('.multi').each(function(){
+						$(this).css('top',this.origin.top + offsetTop); 	//this有origin是因為在multiResizable中已經透過resizable設定過了
+						$(this).css('left',this.origin.left + offsetLeft);
+					});
+				}
 				break;
 		}
 	});
