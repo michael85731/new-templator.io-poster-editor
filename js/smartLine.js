@@ -171,7 +171,9 @@ function createSmart(target){
 	smartDiv.origin = target.origin;
 	setTextStyle(smartDiv);
 
-	$('.posterArea').append(smartDiv);
+	if(!($('.posterArea').children('div').hasClass('smart'))){ 	//若目前已經有smartDiv存在則不需要再新增(已經在smart區間)
+		$('.posterArea').append(smartDiv);
+	}
 }
 
 //若使用者mouseup時，刪除dragging物件，並產生跟smartDiv一模一樣的物件新增到posterArea中
@@ -180,7 +182,7 @@ function eliminateOrigin(){
 		if($(this).css('visibility') == 'hidden'){
 			//清掉resize point
 			var newElement = $(smartDiv).clone();
-			$('.posterArea').append(newElement); 	//要先append上去才能抓到top跟left
+			$('.posterArea').append(newElement); 	//要先append上去才能抓到top跟left，可能跟jquery clone有關
 			$(newElement).children().remove('.ui-resizable-handle');
 
 			//取得目前smartDiv的css
