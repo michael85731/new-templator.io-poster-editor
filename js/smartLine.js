@@ -9,10 +9,15 @@ var smartLeft = [];
 var smartWidth = [];
 var smartHeight = [];
 //參考線距離
-var smartDistance = 20;
+var smartDistance = 10;
 //參考的div要是global，不然會無法刪除
 var smartDiv = $('<div />');
 $(smartDiv).css('position','absolute'); 	//沒設定會無法指定top,left
+//check smart variable
+var isTopSmart;
+var isLeftSmart;
+var isWidthSmart;
+var isHeightSmart;
 
 //drag型智慧型參考線
 function smartDragLine(target){
@@ -29,8 +34,8 @@ function smartDragLine(target){
 	buildSmartLine(allLeft,'left');
 
 	//確認是否在其中一個smartLine裡面，有的話才隱形
-	var isTopSmart = checkSmart('top',target);
-	var isLeftSmart = checkSmart('left',target);
+	isTopSmart = checkSmart('top',target);
+	isLeftSmart = checkSmart('left',target);
 	
 	//符合某個區間時的設定
 	if(isLeftSmart.hide){
@@ -40,23 +45,78 @@ function smartDragLine(target){
 		$(target).css('visibility','hidden');
 		$(smartDiv).css(isLeftSmart.which,isLeftSmart.match);
 		$(smartDiv).css('visibility','visible');
-		
-		$('.multi').each(function(){
-			var offset = $(smartDiv).position().top - smartDiv.origin.top;
-			$(this).css('top',this.origin.top + offset);
-		});
+
+		// $('.multi').each(function(){
+		// 	var offset = $(smartDiv).position().top - smartDiv.origin.top;
+		// 	$(this).css('top',this.origin.top + offset);
+		// });
 
 	}else if(isTopSmart.hide){
 		createSmart(target);
+		
 		//top相同
 		$(target).css('visibility','hidden');
 		$(smartDiv).css(isTopSmart.which,isTopSmart.match);
 		$(smartDiv).css('visibility','visible');
 
-		$('.multi').each(function(){
-			var offset = $(smartDiv).position().left - smartDiv.origin.left;
-			$(this).css('left',this.origin.left + offset);
-		});
+		// $('.multi').each(function(){
+		// 	var offset = $(smartDiv).position().left - smartDiv.origin.left;
+		// 	$(this).css('left',this.origin.left + offset);
+		// });
+
+	}else{
+		//都不符合
+		$(target).css('visibility','visible');
+		$(smartDiv).css('visibility','hidden');
+		$(smartDiv).remove();
+		return true;
+	}
+}
+
+//resize型智慧型參考線
+function smartResizeLine(target){
+	getData();
+
+	//刪除自己，確認比對資料不含自己的內容
+	var selfWidthIndex = allWidth.indexOf($(target).width());
+	var selfHeightIndex = allHeight.indexOf($(target).height());
+	allWidth.splice(selfWidthIndex,1);
+	allHeight.splice(selfHeightIndex,1);
+
+	//建立除了自己之外的smartLine區間
+	buildSmartLine(allWidth,'width');
+	buildSmartLine(allHeight,'height');
+
+	//確認是否在其中一個smartLine裡面，有的話才隱形
+	isWidthSmart = checkSmart('width',target);
+	isHeightSmart = checkSmart('height',target);
+
+	//符合某個區間時的設定
+	if(isWidthSmart.hide){
+		createSmart(target);
+		
+		//left相同
+		$(target).css('visibility','hidden');
+		$(smartDiv).width(isWidthSmart.match);
+		$(smartDiv).css('visibility','visible');
+		
+		// $('.multi').each(function(){
+		// 	var offset = $(smartDiv).position().top - smartDiv.origin.top;
+		// 	$(this).css('top',this.origin.top + offset);
+		// });
+
+	}else if(isHeightSmart.hide){
+		createSmart(target);
+		
+		//top相同
+		$(target).css('visibility','hidden');
+		$(smartDiv).height(isHeightSmart.match);
+		$(smartDiv).css('visibility','visible');
+
+		// $('.multi').each(function(){
+		// 	var offset = $(smartDiv).position().left - smartDiv.origin.left;
+		// 	$(this).css('left',this.origin.left + offset);
+		// });
 
 	}else{
 		//都不符合
@@ -119,8 +179,8 @@ function buildSmartLine(data,which){
 			//build smartWidth sector
 			for(var i = 0;i < data.length;i++){
 				smartWidth.push([]);
-				smartWidth[i].push(parseFloat(data[i].slice(0,-2)) - smartDistance);
-				smartWidth[i].push(parseFloat(data[i].slice(0,-2)) + smartDistance);
+				smartWidth[i].push(data[i] - smartDistance);
+				smartWidth[i].push(data[i] + smartDistance);
 			}
 			break;
 		case 'height':
@@ -130,8 +190,8 @@ function buildSmartLine(data,which){
 			//build smartHeight sector
 			for(var i = 0;i < data.length;i++){
 				smartHeight.push([]);
-				smartHeight[i].push(parseFloat(data[i].slice(0,-2)) - smartDistance);
-				smartHeight[i].push(parseFloat(data[i].slice(0,-2)) + smartDistance);
+				smartHeight[i].push(data[i] - smartDistance);
+				smartHeight[i].push(data[i] + smartDistance);
 			}
 			break;
 	}
@@ -170,8 +230,33 @@ function checkSmart(condition,target){
 			return {'hide':hide,'match':match,'which':which};
 			break;
 		case 'width':
+			var nowWidth = $(target).width();
+			if(isLeftSmart.hide){
+				for(var i =0;i < smartWidth.length;i++){
+					if(nowWidth >= smartWidth[i][0] && nowWidth <= smartWidth[i][1]){
+						match = smartWidth[i][0] + smartDistance; 	//取得真正符合的資料
+						hide = true;
+						which = 'width';
+						break;
+					}
+				}
+			}
+
+			return {'hide':hide,'match':match};
 			break;
 		case 'height':
+			var nowHeight = $(target).height();
+			if(isTopSmart.hide){
+				for(var i =0;i < smartHeight.length;i++){
+					if(nowHeight >= smartHeight[i][0] && nowHeight <= smartHeight[i][1]){
+						match = smartHeight[i][0] + smartDistance; 	//取得真正符合的資料
+						hide = true;
+						which = 'height';
+						break;
+					}
+				}
+			}
+			return {'hide':hide,'match':match};
 			break;
 	}
 
@@ -184,6 +269,9 @@ function createSmart(target){
 	$(smartDiv).css('left',$(target).position().left);
 	$(smartDiv).css('width',$(target).css('width'));
 	$(smartDiv).css('height',$(target).css('height'));
+	$(smartDiv).css('font-size',$(target).css('font-size'));
+	$(smartDiv).css('letter-spacing',$(target).css('letter-spacing'));
+	$(smartDiv).css('line-height',$(target).css('line-height'));
 
 	smartDiv.html($(target).html());
 	smartDiv.exist = true;
@@ -209,8 +297,13 @@ function eliminateOrigin(){
 			$(newElement).removeClass('smart');
 			$(newElement).addClass('text');
 
-			singleDraggable(newElement);
-			singleResizable(newElement);
+			if($('.posterArea').children('div').hasClass('multi')){
+				multiDraggable(newElement);
+				multiResizable(newElement);
+			}else{
+				singleDraggable(newElement);
+				singleResizable(newElement);
+			}
 
 			$(this).remove();
 			$(smartDiv).remove();
