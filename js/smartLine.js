@@ -3,34 +3,59 @@ var smartDistance = 10;
 
 //檢查element的real line有沒有符合眾多smart line的其中一條
 function checkSmart(target){
-	var nowTop = $(target).offset().top;
-	var nowLeft = $(target).offset().left;
-	var nowBottom = $(target).offset().top + $(target).height();
-	var nowRight = $(target).offset().left + $(target).width();
+	var targetTop = $(target).offset().top;
+	var targetLeft = $(target).offset().left;
+	var targetBottom = $(target).offset().top + $(target).height();
+	var targetRight = $(target).offset().left + $(target).width();
 
+	//逐一檢查smart element
 	$('.smart').each(function(){
 		var check = $(this).attr('id').split('smart').slice(1).toString(); //檢查的項目
 
+		var top = $(this).offset().top; 	//取得smart元件的top smart位置
+		var left = $(this).offset().left; 	//取得smart元件的left smart位置
+		var bottom = $(this).offset().top + $(this).parent().height();
+		var right = $(this).offset().left + $(this).parent().width();
+
 		switch(check){
 			case 'Top':
-				var top = $(this).offset().top; 	//取得smart元件的top smart位置
-				if(nowTop >= top - smartDistance && nowTop <= top + smartDistance){	//檢查nowTop是否有符合任何smartTop
-					removeMirror(); //若目前仍在該區間則會重複新增，所以先移除舊的mirror再新增
+			case 'Bottom':
+				if(targetTop >= top - smartDistance && targetTop <= top - smartDistance){
+					console.log('check');
+					removeMirror();
 					mirror(target,'top',top);
-					return false; 	//break jquery each
+					return false;
+				}else if(targetTop >= bottom - smartDistance && targetTop <= bottom + smartDistance){
+					removeMirror();
+					mirror(target,'top',bottom);
+					return false;
+				}else if(targetBottom >= top - smartDistance && targetBottom <= top + smartDistance){
+					removeMirror();
+					mirror(target,'top',top - $(target).height());
+					return false;
 				}else{
 					removeMirror();
-					return; 		//continue jquery each
+					return;
 				}
 				break;
 			case 'Left':
-				
-				break;
-			case 'Bottom':
-				
-				break;
 			case 'Right':
-				
+				if(targetLeft >= left - smartDistance && targetLeft <= left + smartDistance){
+					removeMirror();
+					mirror(target,'left',left);
+					return false;
+				}else if(targetLeft >= right - smartDistance && targetLeft <= right + smartDistance){
+					removeMirror();
+					mirror(target,'left',right);
+					return false;
+				}else if(targetRight >= left - smartDistance && targetRight <= left + smartDistance){
+					removeMirror();
+					mirror(target,'left',left - $(target).width());
+					return false;
+				}else{
+					removeMirror();
+					return;
+				}
 				break;
 		}
 	
@@ -43,7 +68,15 @@ function mirror(target,argument,data){
 	var mirror = $(target).clone();
 	$(mirror).attr('id','mirror');
 	$('.posterArea').append(mirror);
-	$(mirror).offset({top:data,left:$(target).offset().left});
+	
+	switch(argument){
+		case 'top':
+			$(mirror).offset({top:data,left:$(target).offset().left});
+			break;
+		case 'left':
+			$(mirror).offset({top:$(target).offset().top,left:data});
+			break;
+	}
 }
 
 //remove mirror
