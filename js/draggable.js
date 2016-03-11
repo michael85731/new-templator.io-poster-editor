@@ -1,7 +1,22 @@
 //讓所有posterArea裡面的原件都能draggable
 function draggableAll(){
-	$('.posterArea').children('div').on('drag',function(event,ui){
-		smartDragLine(event.target);
+	$('.posterArea').children('div').on('drag dragcreate dragstop',function(event,ui){
+		switch(event.type){
+			case 'dragcreate':
+				createSmart(event.target);
+				break;
+			case 'drag':
+				removeSmart(event.target);
+				checkSmart(event.target);
+				break;
+			case 'dragstop':
+				//如果已經有smart element存在則不在新增
+				if(!($(event.target).children().hasClass('smart'))){
+					createSmart(event.target);
+				}
+				adjustSmart(event.target);
+				break;
+		}
 	});
 	$(".posterArea").children("div").draggable();
 }
@@ -9,7 +24,7 @@ function draggableAll(){
 //讓新產生的div能有draggable的效果
 function singleDraggable(target){
 	$(target).on('drag',function(event,ui){
-		smartDragLine(event.target);
+		
 	});
 	$(target).draggable();
 }

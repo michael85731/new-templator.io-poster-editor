@@ -81,7 +81,9 @@ body{
 }
 
 .smart{
-    border:1px solid red;
+    /*visibility: hidden;*/
+    position: absolute;
+    border:1px solid blue;
 }
 
 </style>
@@ -230,10 +232,10 @@ $(document).ready(function(){
             }
         }
 
-        //若dragging結束後有物件為hidden，則刪除該物件(處理drag event)
-        if(event.type == 'mouseup'){
-            eliminateOrigin();
-        }
+        // //若dragging結束後有物件為hidden，則刪除該物件(處理drag event)
+        // if(event.type == 'mouseup'){
+        //     eliminateOrigin();
+        // }
     });
 
     //鍵盤事件區

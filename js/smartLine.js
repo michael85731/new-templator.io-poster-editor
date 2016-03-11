@@ -1,312 +1,103 @@
-//儲存各項數據
-var allTop = [];
-var allLeft = [];
-var allWidth = [];
-var allHeight = [];
-//各屬性的smartLine區間
-var smartTop = [];
-var smartLeft = [];
-var smartWidth = [];
-var smartHeight = [];
-//參考線距離
+//smart Line div的寬度
 var smartDistance = 10;
-//參考的div要是global，不然會無法刪除
-var smartDiv = $('<div />');
-$(smartDiv).css('position','absolute'); 	//沒設定會無法指定top,left
-//check smart variable
-var isTopSmart;
-var isLeftSmart;
-var isWidthSmart;
-var isHeightSmart;
 
-//drag型智慧型參考線
-function smartDragLine(target){
-	getData();
+//檢查element的real line有沒有符合眾多smart line的其中一條
+function checkSmart(target){
+	var nowTop = $(target).offset().top;
+	var nowLeft = $(target).offset().left;
+	var nowBottom = $(target).offset().top + $(target).height();
+	var nowRight = $(target).offset().left + $(target).width();
 
-	//刪除自己，確認比對資料不含自己的內容
-	var selfTopIndex = allTop.indexOf($(target).css('top'));
-	var selfLeftIndex = allLeft.indexOf($(target).css('left'));
-	allTop.splice(selfTopIndex,1);
-	allLeft.splice(selfLeftIndex,1);
+	$('.smart').each(function(){
+		var check = $(this).attr('id').split('smart').slice(1).toString(); //檢查的項目
 
-	//建立除了自己之外的smartLine區間
-	buildSmartLine(allTop,'top');
-	buildSmartLine(allLeft,'left');
-
-	//確認是否在其中一個smartLine裡面，有的話才隱形
-	isTopSmart = checkSmart('top',target);
-	isLeftSmart = checkSmart('left',target);
-	
-	//符合某個區間時的設定
-	if(isLeftSmart.hide){
-		createSmart(target);
-		
-		//left相同
-		$(target).css('visibility','hidden');
-		$(smartDiv).css(isLeftSmart.which,isLeftSmart.match);
-		$(smartDiv).css('visibility','visible');
-
-		// $('.multi').each(function(){
-		// 	var offset = $(smartDiv).position().top - smartDiv.origin.top;
-		// 	$(this).css('top',this.origin.top + offset);
-		// });
-
-	}else if(isTopSmart.hide){
-		createSmart(target);
-		
-		//top相同
-		$(target).css('visibility','hidden');
-		$(smartDiv).css(isTopSmart.which,isTopSmart.match);
-		$(smartDiv).css('visibility','visible');
-
-		// $('.multi').each(function(){
-		// 	var offset = $(smartDiv).position().left - smartDiv.origin.left;
-		// 	$(this).css('left',this.origin.left + offset);
-		// });
-
-	}else{
-		//都不符合
-		$(target).css('visibility','visible');
-		$(smartDiv).css('visibility','hidden');
-		$(smartDiv).remove();
-		return true;
-	}
-}
-
-//resize型智慧型參考線
-function smartResizeLine(target){
-	getData();
-
-	//刪除自己，確認比對資料不含自己的內容
-	var selfWidthIndex = allWidth.indexOf($(target).width());
-	var selfHeightIndex = allHeight.indexOf($(target).height());
-	allWidth.splice(selfWidthIndex,1);
-	allHeight.splice(selfHeightIndex,1);
-
-	//建立除了自己之外的smartLine區間
-	buildSmartLine(allWidth,'width');
-	buildSmartLine(allHeight,'height');
-
-	//確認是否在其中一個smartLine裡面，有的話才隱形
-	isWidthSmart = checkSmart('width',target);
-	isHeightSmart = checkSmart('height',target);
-
-	//符合某個區間時的設定
-	if(isWidthSmart.hide){
-		createSmart(target);
-		
-		//left相同
-		$(target).css('visibility','hidden');
-		$(smartDiv).width(isWidthSmart.match);
-		$(smartDiv).css('visibility','visible');
-		
-		// $('.multi').each(function(){
-		// 	var offset = $(smartDiv).position().top - smartDiv.origin.top;
-		// 	$(this).css('top',this.origin.top + offset);
-		// });
-
-	}else if(isHeightSmart.hide){
-		createSmart(target);
-		
-		//top相同
-		$(target).css('visibility','hidden');
-		$(smartDiv).height(isHeightSmart.match);
-		$(smartDiv).css('visibility','visible');
-
-		// $('.multi').each(function(){
-		// 	var offset = $(smartDiv).position().left - smartDiv.origin.left;
-		// 	$(this).css('left',this.origin.left + offset);
-		// });
-
-	}else{
-		//都不符合
-		$(target).css('visibility','visible');
-		$(smartDiv).css('visibility','hidden');
-		$(smartDiv).remove();
-		return true;
-	}
-}
-
-//取得目前所有元件的資料
-function getData(){
-	//清除先前資料，因為elemnt會有變動
-	allTop = [];
-	allLeft = [];
-	allWidth = [];
-	allHeight = [];
-	
-	$('.posterArea').children('div').each(function(){
-		if(!($(this).hasClass('smart'))){ 	//不能取到smart元素，因smart element只是輔助
-			allTop.push($(this).css('top'));
-			allLeft.push($(this).css('left'));
-			allWidth.push($(this).width());
-			allHeight.push($(this).height());
+		switch(check){
+			case 'Top':
+				var top = $(this).offset().top; 	//取得smart元件的top smart位置
+				if(nowTop >= top - smartDistance && nowTop <= top + smartDistance){	//檢查nowTop是否有符合任何smartTop
+					removeMirror(); //若目前仍在該區間則會重複新增，所以先移除舊的mirror再新增
+					mirror(target,'top',top);
+					return false; 	//break jquery each
+				}else{
+					removeMirror();
+					return; 		//continue jquery each
+				}
+				break;
+			case 'Left':
+				
+				break;
+			case 'Bottom':
+				
+				break;
+			case 'Right':
+				
+				break;
 		}
-	})
-}
-
-//建立smartLine區間，也就是目前dragging物件在這些區間都會隱藏
-function buildSmartLine(data,which){
-
-	//build sector
-	switch(which){
-		case 'top':
-			//清除先前資料
-			smartTop = [];
-			
-			//build smartTop sector
-			for(var i = 0;i < data.length;i++){
-				smartTop.push([]);
-				smartTop[i].push(parseFloat(data[i].slice(0,-2)) - smartDistance);
-				smartTop[i].push(parseFloat(data[i].slice(0,-2)) + smartDistance);
-			}
-			break;
-		case 'left':
-			//清除先前資料
-			smartLeft = [];
-			
-			//build smartLeft sector
-			for(var i = 0;i < data.length;i++){
-				smartLeft.push([]);
-				smartLeft[i].push(parseFloat(data[i].slice(0,-2)) - smartDistance);
-				smartLeft[i].push(parseFloat(data[i].slice(0,-2)) + smartDistance);
-			}
-			break;
-		case 'width':
-			//清除先前資料
-			smartWidth = [];
-			
-			//build smartWidth sector
-			for(var i = 0;i < data.length;i++){
-				smartWidth.push([]);
-				smartWidth[i].push(data[i] - smartDistance);
-				smartWidth[i].push(data[i] + smartDistance);
-			}
-			break;
-		case 'height':
-			//清除先前資料
-			smartHeight = [];
-			
-			//build smartHeight sector
-			for(var i = 0;i < data.length;i++){
-				smartHeight.push([]);
-				smartHeight[i].push(data[i] - smartDistance);
-				smartHeight[i].push(data[i] + smartDistance);
-			}
-			break;
-	}
-}
-
-function checkSmart(condition,target){
-	var which = '';		//紀錄哪個smart區間被觸發
-	var match = 0;		//真正match某元件的值
-	var hide = false; 	//是否隱藏origin element
-
-	switch(condition){
-		case 'top':
-			//檢查smartTop
-			var nowTop = parseFloat($(target).css('top').slice(0,-2));
-			for(var i = 0;i < smartTop.length;i++){
-				if(nowTop >= smartTop[i][0] && nowTop <= smartTop[i][1]){
-					match = smartTop[i][0] + smartDistance; 	//取得真正符合的資料
-					hide = true;
-					which = 'top';
-					break;
-				}
-			}
-			return {'hide':hide,'match':match,'which':which};
-			break;
-		case 'left':
-			var nowLeft = parseFloat($(target).css('left').slice(0,-2));
-			//檢查smartLeft
-			for(var i = 0;i < smartLeft.length;i++){
-				if(nowLeft >= smartLeft[i][0] && nowLeft <= smartLeft[i][1]){
-					match = smartLeft[i][0] + smartDistance; 	//取得真正符合的資料
-					hide = true;
-					which = 'left';
-					break;
-				}
-			}
-			return {'hide':hide,'match':match,'which':which};
-			break;
-		case 'width':
-			var nowWidth = $(target).width();
-			if(isLeftSmart.hide){
-				for(var i =0;i < smartWidth.length;i++){
-					if(nowWidth >= smartWidth[i][0] && nowWidth <= smartWidth[i][1]){
-						match = smartWidth[i][0] + smartDistance; 	//取得真正符合的資料
-						hide = true;
-						which = 'width';
-						break;
-					}
-				}
-			}
-
-			return {'hide':hide,'match':match};
-			break;
-		case 'height':
-			var nowHeight = $(target).height();
-			if(isTopSmart.hide){
-				for(var i =0;i < smartHeight.length;i++){
-					if(nowHeight >= smartHeight[i][0] && nowHeight <= smartHeight[i][1]){
-						match = smartHeight[i][0] + smartDistance; 	//取得真正符合的資料
-						hide = true;
-						which = 'height';
-						break;
-					}
-				}
-			}
-			return {'hide':hide,'match':match};
-			break;
-	}
-
-}
-
-//generate same object with event.target but has the particular top
-function createSmart(target){
-	//不更新smartDiv，因為要計算offset；也不能在這邊更新target，因為dragging時要參考原來的位置計算offset
-	$(smartDiv).css('top',$(target).position().top);
-	$(smartDiv).css('left',$(target).position().left);
-	$(smartDiv).css('width',$(target).css('width'));
-	$(smartDiv).css('height',$(target).css('height'));
-	$(smartDiv).css('font-size',$(target).css('font-size'));
-	$(smartDiv).css('letter-spacing',$(target).css('letter-spacing'));
-	$(smartDiv).css('line-height',$(target).css('line-height'));
-
-	smartDiv.html($(target).html());
-	smartDiv.exist = true;
-	smartDiv.addClass('smart');
-
-	if(!($('.posterArea').children('div').hasClass('smart'))){ 	//若目前已經有smartDiv存在則不需要再新增(已經在smart區間)
-		$('.posterArea').append(smartDiv);
-		initElementOrigin(smartDiv); //紀錄smartDiv的原位置
-	}
-}
-
-//若使用者mouseup時，刪除dragging物件，並產生跟smartDiv一模一樣的物件新增到posterArea中
-function eliminateOrigin(){
-	$('.posterArea').children('div').each(function(){
-		if($(this).css('visibility') == 'hidden'){
-			//清掉resize point並加到posterArea中
-			var newElement = $(smartDiv).clone();
-			$('.posterArea').append(newElement);
-			$(newElement).children().remove('.ui-resizable-handle');
-
-			//set css class
-			newElement.exist = true;
-			$(newElement).removeClass('smart');
-			$(newElement).addClass('text');
-
-			if($('.posterArea').children('div').hasClass('multi')){
-				multiDraggable(newElement);
-				multiResizable(newElement);
-			}else{
-				singleDraggable(newElement);
-				singleResizable(newElement);
-			}
-
-			$(this).remove();
-			$(smartDiv).remove();
-		}
+	
 	});
+
+}
+
+//clone origin element and hide origin one
+function mirror(target,argument,data){
+	var mirror = $(target).clone();
+	$(mirror).attr('id','mirror');
+	$('.posterArea').append(mirror);
+	$(mirror).offset({top:data,left:$(target).offset().left});
+}
+
+//remove mirror
+function removeMirror(){
+	$('#mirror').remove();
+}
+
+//建立real line
+function createSmart(target){
+	var realTop = $('<div />');
+	var realLeft = $('<div />');
+	var realRight = $('<div />');
+	var realBottom = $('<div />');
+
+	var top = parseFloat($(target).css('top').slice(0,-2));
+	var left = parseFloat($(target).css('left').slice(0,-2));
+
+	$(realTop).width($('.posterArea').width());
+	$(realLeft).height($('.posterArea').height());
+	$(realBottom).width($('.posterArea').width());
+	$(realRight).height($('.posterArea').height());
+
+	//add class
+	$(realTop).addClass('smart');
+	$(realTop).attr('id','smartTop');
+	$(realLeft).addClass('smart');
+	$(realLeft).attr('id','smartLeft');
+	$(realBottom).addClass('smart');
+	$(realBottom).attr('id','smartBottom');
+	$(realRight).addClass('smart');
+	$(realRight).attr('id','smartRight');
+
+	//set top and left
+	$(realTop).css({'top':0,'left':0 - left - 2});
+	$(realLeft).css({'top':0 - top - 2,'left':0});
+	$(realBottom).css({'top':0 + $(target).height(),'left':0 - left - 2});
+	$(realRight).css({'top':0 - top - 2,'left':0 + $(target).width()});
+
+	$(target).append(realTop,realRight,realBottom,realLeft);
+}
+
+//when element moves, adjust its real line position
+function adjustSmart(target){
+	var top = parseFloat($(target).css('top').slice(0,-2));
+	var left = parseFloat($(target).css('left').slice(0,-2));
+
+	//set top and left
+	$(target).children('#smartTop').css({'top':0,'left':0 - left - 2});
+	$(target).children('#smartLeft').css({'top':0 - top - 2,'left':0});
+	$(target).children('#smartBottom').css({'top':0+ $(target).height(),'left':0 - left - 2});
+	$(target).children('#smartRight').css({'top':0 - top - 2,'left':0 + $(target).width()});
+}
+
+//remove smart line
+function removeSmart(target){
+	$(target).children('.smart').remove();
 }

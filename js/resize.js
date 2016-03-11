@@ -80,7 +80,7 @@ function resizable(target){
 
 	//set smartResizeLine
 	$(target).on('resize',function(event,ui){
-		smartResizeLine(event.target);
+		
 	});
 
 	$(target).resizable({
