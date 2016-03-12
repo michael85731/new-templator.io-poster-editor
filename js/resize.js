@@ -25,7 +25,7 @@ function resizeText(target){
 
 //當IMG觸發resize事件時，能跟著變動pic size
 function resizePic(target){
-	if(target.origin == null){ 	//當有smartDrag發生，就會因為jquery的關係(initOriginElement傳的是jquery object而非origin source)而沒有origin
+	if(target.origin == null){
 		initElementOrigin(target);
 	}
 
@@ -78,9 +78,21 @@ function resizable(target){
 		$(target).append(controlPoint);
 	}
 
-	//set smartResizeLine
-	$(target).on('resize',function(event,ui){
-		
+	//set smartLine，不用偵測resizecreate是因為在element新增時就已經在draggable中加上smartLine了，所以不用再createSmart
+	$(target).on('resize resizestop',function(event,ui){
+		switch(event.type){
+			case 'resize':
+				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
+				checkSmart(event.target,true);
+				break;
+			case 'resizestop':
+				//如果已經有smart element存在則不用再新增
+				if(!($(event.target).children().hasClass('smart'))){
+					createSmart(event.target);
+				}
+				adjustSmart(event.target);
+				break;
+		}
 	});
 
 	$(target).resizable({
