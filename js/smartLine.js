@@ -89,16 +89,18 @@ function hideSmartLine(){
 
 //clone origin element and hide origin one
 function mirror(target,argument,data){
-	var mirror = $(target).clone();
-	$(mirror).attr('id','mirror');
-	$('.posterArea').append(mirror);
-	
+	if(!($('#mirror').length)){
+		var mirror = $(target).clone();
+		$(mirror).attr('id','mirror');
+		$('.posterArea').append(mirror);
+	}
+
 	switch(argument){
 		case 'top':
-			$(mirror).offset({top:data,left:$(target).offset().left});
+			$('#mirror').offset({top:data,left:$(target).offset().left});
 			break;
 		case 'left':
-			$(mirror).offset({top:$(target).offset().top,left:data});
+			$('#mirror').offset({top:$(target).offset().top,left:data});
 			break;
 	}
 }
