@@ -6,11 +6,11 @@ function draggableAll(){
 				createSmart(event.target);
 				break;
 			case 'drag':
-				removeSmart(event.target);
+				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
 				checkSmart(event.target);
 				break;
 			case 'dragstop':
-				//如果已經有smart element存在則不在新增
+				//如果已經有smart element存在則不用再新增
 				if(!($(event.target).children().hasClass('smart'))){
 					createSmart(event.target);
 				}
@@ -23,8 +23,23 @@ function draggableAll(){
 
 //讓新產生的div能有draggable的效果
 function singleDraggable(target){
-	$(target).on('drag',function(event,ui){
-		
+	$(target).on('drag dragcreate dragstop',function(event,ui){
+		switch(event.type){
+			case 'dragcreate':
+				createSmart(event.target);
+				break;
+			case 'drag':
+				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
+				checkSmart(event.target);
+				break;
+			case 'dragstop':
+				//如果已經有smart element存在則不用再新增
+				if(!($(event.target).children().hasClass('smart'))){
+					createSmart(event.target);
+				}
+				adjustSmart(event.target);
+				break;
+		}
 	});
 	$(target).draggable();
 }
