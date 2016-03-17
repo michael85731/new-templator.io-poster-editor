@@ -8,14 +8,19 @@ function checkSmart(target,resize){
 	var targetBottom = $(target).offset().top + $(target).height();
 	var targetRight = $(target).offset().left + $(target).width();
 
+	var removeMirrorCheck = false;
+
 	//逐一檢查smart element
 	$('.smart').each(function(){
 		//bottom跟right不用另外取，因在createSmart的時候就設定過top跟left，所以當取到smartBottom or smartLeft就不用再設定
 		var top = $(this).offset().top;
-		var left = $(this).offset().left; 	
+		var left = $(this).offset().left;
 
 		//判斷法則
 		if(targetTop >= top - smartDistance && targetTop <= top + smartDistance){
+			hideSmartLine();
+			removeMirrorCheck = false;
+
 			showSmartLine(this);
 			
 			if(resize){ 	//resize時才調整
@@ -27,16 +32,25 @@ function checkSmart(target,resize){
 			$(target).css('visibility','hidden');
 			return false;
 		}else if(targetBottom >= top - smartDistance && targetBottom <= top + smartDistance){
+			hideSmartLine();
+			removeMirrorCheck = false;
+
 			showSmartLine(this);
 			
 			if(resize){ 	//resize時才調整
 				resize = 'top'; 	//resizing而發生bottom與某smartTop相同時，原本的top會跑掉，所以要將mirror設定成原本的top。但因為改top後會造成height跟resize後的不同，所以height要再加上原本top跟resize後top的差距(在top不動的狀況下將height加上top間的差距)
+				mirror(target,'top',top,resize,targetTop);
+			}else{
+				mirror(target,'top',top - $(target).height());
 			}
-			mirror(target,'top',top - $(target).height(),resize,targetTop);
+			
 			
 			$(target).css('visibility','hidden');
 			return false;
 		}else if(targetLeft >= left - smartDistance && targetLeft <= left + smartDistance){
+			hideSmartLine();
+			removeMirrorCheck = false;
+
 			showSmartLine(this);
 			
 			if(resize){ 	//resize時才調整
@@ -47,22 +61,31 @@ function checkSmart(target,resize){
 			$(target).css('visibility','hidden');
 			return false;
 		}else if(targetRight >= left - smartDistance && targetRight <= left + smartDistance){
+			hideSmartLine();
+			removeMirrorCheck = false;
+
 			showSmartLine(this);
 			
 			if(resize){ 	//resize時才調整
 				resize = 'left'; 	//resizing而發生right與某smartLeft相同，原本的left會跑掉，所以要將mirror設定成原本的left，再將mirror的width加上原本left跟resize後left的差距(在left不動的狀況下將width加上left間的差距)
+				mirror(target,'left',left,resize,targetLeft);
+			}else{
+				mirror(target,'left',left - $(target).width());
 			}
-			mirror(target,'left',left - $(target).width(),resize,targetLeft);
+			
 			
 			$(target).css('visibility','hidden');
 			return false;
 		}else{
-			$(target).css('visibility','visible');
-			hideSmartLine()
-			removeMirror();
-			return;
+			removeMirrorCheck = true;
 		}	
 	});
+
+	if(removeMirrorCheck){
+		$(target).css('visibility','visible');
+		hideSmartLine();
+		removeMirror();
+	}
 
 }
 
@@ -100,11 +123,13 @@ function mirror(target,position,positionData,resize,resizeData){
 				case 'bottom':
 					var diff = resizeData - ($('.mirror').offset().top + $('.mirror').height());
 					$('.mirror').height($('.mirror').height() + diff);
+					$('.mirror').width($(target).width());
 					break;
 				case 'top':
 					var diff = positionData - resizeData;
 					$('.mirror').offset({top:resizeData,left:$(target).offset().left});
-					$('.mirror').height($('.mirror').height() + diff);
+					$('.mirror').height(diff);
+					$('.mirror').width($(target).width());
 					break;
 			}
 			break;
@@ -115,11 +140,13 @@ function mirror(target,position,positionData,resize,resizeData){
 				case 'right':
 					var diff = resizeData - ($('.mirror').offset().left + $('.mirror').width());
 					$('.mirror').width($('.mirror').width() + diff);
+					$('.mirror').height($(target).height());
 					break;
 				case 'left':
 					var diff = positionData - resizeData;
 					$('.mirror').offset({top:$(target).offset().top,left:resizeData});
-					$('.mirror').width($('.mirror').width() + diff);
+					$('.mirror').width(diff);
+					$('.mirror').height($(target).height());
 					break;
 			}
 			break;
