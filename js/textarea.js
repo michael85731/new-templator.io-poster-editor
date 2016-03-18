@@ -17,15 +17,15 @@ function setTextareaStyle(target){
 function adjustTextarea(target){
 	var newContent = $(target).html().replace(/<br>/g,'\n');
 
-	var mostWidth = countTextWidth(newContent,target.origin.size,target.origin.letterSpacing);
-	var nowHeight = countTextHeight(newContent,target.origin.size,target.origin.lineHeight);
+	var mostWidth = countTextWidth(newContent,$(target)[0].origin.size,$(target)[0].origin.letterSpacing);
+	var nowHeight = countTextHeight(newContent,$(target)[0].origin.size,$(target)[0].origin.lineHeight);
 
 	$(target).width(mostWidth);
 	$(target).height(nowHeight);
 
 	//update target's origin
-	target.origin.width = mostWidth;
-	target.origin.height = nowHeight;
+	$(target)[0].origin.width = mostWidth;
+	$(target)[0].origin.height = nowHeight;
 }
 
 //計算width

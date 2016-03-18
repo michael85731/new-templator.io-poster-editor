@@ -1,6 +1,7 @@
 //轉為textarea
 function transToTextarea(target){
 	cancelResizableElement(); 	//取消resize point,避免html()時會取到resize point
+	removeSmart(target);		//取消smartLine，一樣避免html()時會取到smartLine
 
 	//初始化原來element的origin
 	initElementOrigin(target);
@@ -48,19 +49,23 @@ function setConvertDiv(target){
 
 function toDiv(target){
 	var content = $(target).html().replace(/\n/,'<br>'); 	//因為div只能讀<br>,所以將textarea中的\n換成<br>
-	
+
 	var newDiv = $('<div />');
 	newDiv.origin = target.origin; 	//繼承原element的origin
 	$(target).replaceWith(newDiv);
 
-	$(newDiv).html(content);
-	singleDraggable(newDiv);
+	if(content == ''){
+		$(newDiv).remove(); //若為空的直接刪除就可以了
+	}else{
+		$(newDiv).html(content);
 
-	//若目前element存在，則不需重新設定element's tope %&left
-	if(target.exist){
-		newDiv.exist = true;
+		//若目前element存在，則不需重新設定element's tope %&left
+		if(target.exist){
+			newDiv.exist = true;
+		}
+
+		setOriginTextStyle(newDiv);
+		singleDraggable(newDiv);
 	}
-
-	setOriginTextStyle(newDiv);
 
 }

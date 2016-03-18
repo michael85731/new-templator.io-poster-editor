@@ -91,12 +91,12 @@ function checkSmart(target,resize){
 
 //把參考線show出來
 function showSmartLine(smartLine){
-	$(smartLine).css({'border':'1px dashed blue','visibility':'visible'});
+	// $(smartLine).css({'border':'1px dashed blue','visibility':'visible'});
 }
 
 //隱藏參考線
 function hideSmartLine(){
-	$('.smart').css('visibility','hidden');
+	// $('.smart').css('visibility','hidden');
 }
 
 //clone origin element and hide origin one
@@ -159,36 +159,36 @@ function removeMirror(){
 
 //建立real line
 function createSmart(target){
-	var realTop = $('<div />');
-	var realLeft = $('<div />');
-	var realRight = $('<div />');
-	var realBottom = $('<div />');
+	var smartTop = $('<div />');
+	var smartLeft = $('<div />');
+	var smartRight = $('<div />');
+	var smartBottom = $('<div />');
 
 	var top = parseFloat($(target).css('top').slice(0,-2));
 	var left = parseFloat($(target).css('left').slice(0,-2));
 
-	$(realTop).width($('.posterArea').width());
-	$(realLeft).height($('.posterArea').height());
-	$(realBottom).width($('.posterArea').width());
-	$(realRight).height($('.posterArea').height());
+	$(smartTop).width($('.posterArea').width());
+	$(smartLeft).height($('.posterArea').height());
+	$(smartBottom).width($('.posterArea').width());
+	$(smartRight).height($('.posterArea').height());
 
 	//add class
-	$(realTop).addClass('smart');
-	$(realTop).attr('id','smartTop');
-	$(realLeft).addClass('smart');
-	$(realLeft).attr('id','smartLeft');
-	$(realBottom).addClass('smart');
-	$(realBottom).attr('id','smartBottom');
-	$(realRight).addClass('smart');
-	$(realRight).attr('id','smartRight');
+	$(smartTop).addClass('smart');
+	$(smartTop).attr('id','smartTop');
+	$(smartLeft).addClass('smart');
+	$(smartLeft).attr('id','smartLeft');
+	$(smartBottom).addClass('smart');
+	$(smartBottom).attr('id','smartBottom');
+	$(smartRight).addClass('smart');
+	$(smartRight).attr('id','smartRight');
 
 	//set top and left
-	$(realTop).css({'top':0,'left':0 - left - 2});
-	$(realLeft).css({'top':0 - top - 2,'left':0});
-	$(realBottom).css({'top':0 + $(target).height(),'left':0 - left - 2});
-	$(realRight).css({'top':0 - top - 2,'left':0 + $(target).width()});
+	$(smartTop).css({'top':0,'left':0 - left - 2});
+	$(smartLeft).css({'top':0 - top - 2,'left':0});
+	$(smartBottom).css({'top':0 + $(target).height(),'left':0 - left - 2});
+	$(smartRight).css({'top':0 - top - 2,'left':0 + $(target).width()});
 
-	$(target).append(realTop,realRight,realBottom,realLeft); 	//不新增在body是因為adjustSmart可以指定要調整的smartLine，而不用全部一起調整
+	$(target).append(smartTop,smartRight,smartBottom,smartLeft); 	//不新增在body是因為adjustSmart可以指定要調整的smartLine，而不用全部一起調整
 }
 
 //when element moves, adjust its smart line position
@@ -211,8 +211,8 @@ function removeSmart(target){
 //轉成正式object而不是mirror object
 function replaceMirrorToReal(old){
 	$('.mirror').children().remove('.ui-resizable-handle');
-	singleDraggable($('.mirror'));
-	singleResizable($('.mirror'));
+	singleDraggable($('div.mirror')[0]);
+	singleResizable($('div.mirror')[0]);
 	$('.mirror').removeClass('mirror');
 	$(old).remove();
 }
