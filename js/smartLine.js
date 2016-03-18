@@ -41,7 +41,7 @@ function checkSmart(target,resize){
 				resize = 'top'; 	//resizing而發生bottom與某smartTop相同時，原本的top會跑掉，所以要將mirror設定成原本的top。但因為改top後會造成height跟resize後的不同，所以height要再加上原本top跟resize後top的差距(在top不動的狀況下將height加上top間的差距)
 				mirror(target,'top',top,resize,targetTop);
 			}else{
-				mirror(target,'top',top - $(target).height());
+				mirror(target,'top',top - $(target).height()); 	//drag時的位置跟resize時候不同，drag時top必須是smartTop - target's height
 			}
 			
 			
@@ -70,7 +70,7 @@ function checkSmart(target,resize){
 				resize = 'left'; 	//resizing而發生right與某smartLeft相同，原本的left會跑掉，所以要將mirror設定成原本的left，再將mirror的width加上原本left跟resize後left的差距(在left不動的狀況下將width加上left間的差距)
 				mirror(target,'left',left,resize,targetLeft);
 			}else{
-				mirror(target,'left',left - $(target).width());
+				mirror(target,'left',left - $(target).width()); 	//drag時的位置跟resize時候不同，drag時left必須是smartLeft - target's width
 			}
 			
 			
@@ -107,11 +107,10 @@ function mirror(target,position,positionData,resize,resizeData){
 		$(mirror).addClass('mirror');
 		$('.posterArea').append(mirror);
 
-		//有圖片的話，因為分container跟img，所以img也要複製
+		//有圖片的話，因為分container跟img，所以img要加上mirror class，resize跟drag時才能正確顯示(下面的調整才能正確執行)
 		if($(target).children('img').length){
-			var img = $(target).children('img').clone();
+			var img = $(mirror).children('img');
 			$(img).addClass('mirror');
-			$(mirror).append(img);
 		}
 	}
 
@@ -207,4 +206,13 @@ function adjustSmart(target){
 //remove element's smart line
 function removeSmart(target){
 	$(target).children('.smart').remove();
+}
+
+//轉成正式object而不是mirror object
+function replaceMirrorToReal(old){
+	$('.mirror').children().remove('.ui-resizable-handle');
+	singleDraggable($('.mirror'));
+	singleResizable($('.mirror'));
+	$('.mirror').removeClass('mirror');
+	$(old).remove();
 }

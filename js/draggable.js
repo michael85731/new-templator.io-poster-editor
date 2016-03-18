@@ -15,6 +15,10 @@ function draggableAll(){
 					createSmart(event.target);
 				}
 				adjustSmart(event.target);
+
+				if($('.mirror').length){
+					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代
+				}
 				break;
 		}
 	});
@@ -33,11 +37,15 @@ function singleDraggable(target){
 				checkSmart(event.target);
 				break;
 			case 'dragstop':
-				//如果已經有smart element存在則不用再新增
+				//幫原來的原件(target)加上smartLine，因為drag時刪掉了
 				if(!($(event.target).children().hasClass('smart'))){
 					createSmart(event.target);
 				}
 				adjustSmart(event.target);
+
+				if($('.mirror').length){
+					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代
+				}	
 				break;
 		}
 	});

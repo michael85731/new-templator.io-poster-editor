@@ -2,21 +2,17 @@
 
 //當text類型的div觸發resize事件時，能跟著變動text size
 function resizeText(target){
-	if(target.origin == null){ 	//當有smartDrag發生，就會因為jquery的關係(initElementOrig收到的是jquery object而非origin source)而沒有origin
-		initElementOrigin(target);
-	}
-
 	nowHeight = $(target).height();
 	nowWidth = $(target).width();
 	
 	//find minimize change and change style
-	var heightDiff = (nowHeight / target.origin.height);
-	var widthDiff = (nowWidth / target.origin.width);
+	var heightDiff = (nowHeight / $(target)[0].origin.height);
+	var widthDiff = (nowWidth / $(target)[0].origin.width);
 
 	var adjustment = Math.min(heightDiff,widthDiff);
 	var unit = $(target).css("font-size").slice(-2);
 
-	var result = parseFloat(target.origin.size.slice(0,-2) * adjustment) + unit;
+	var result = parseFloat($(target)[0].origin.size.slice(0,-2) * adjustment) + unit;
 
 	if(adjustment != 0){
 		$(target).css("font-size",result);
@@ -25,10 +21,6 @@ function resizeText(target){
 
 //當IMG觸發resize事件時，能跟著變動pic size
 function resizePic(target){
-	if(target.origin == null){
-		initElementOrigin(target);
-	}
-
 	nowHeight = $(target).height();
 	nowWidth = $(target).width();
 
@@ -82,15 +74,19 @@ function resizable(target){
 	$(target).on('resize resizestop',function(event,ui){
 		switch(event.type){
 			case 'resize':
-				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
-				checkSmart(event.target,true);
+				removeSmart(event.target); 		//不要檢查到自己，所以先把自己的smartLine刪除
+				checkSmart(event.target,true); 	//送一個識別resizing的參數
 				break;
 			case 'resizestop':
-				//如果已經有smart element存在則不用再新增
+				//幫原來的原件(target)加上smartLine，因為resize時刪掉了
 				if(!($(event.target).children().hasClass('smart'))){
 					createSmart(event.target);
 				}
 				adjustSmart(event.target);
+				
+				if($('.mirror').length){
+					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代
+				}
 				break;
 		}
 	});
@@ -110,12 +106,8 @@ function resizable(target){
 	});
 
 	//record text(div) target.origin css, and make sure target.origin won't update
-	if(target.origin == null){
-		target.origin = new Origin($(target).position().top,$(target).position().left
-		,$(target).width(),$(target).height()
-		,$(target).html().replace(/<br>/g,'\n')
-		,$(target).css('color'),$(target).css('font-size')
-		,$(target).css('letter-spacing'),$(target).css('line-height'));
+	if($(target)[0].origin == null){
+		initElementOrigin(target);
 	}
 }
 

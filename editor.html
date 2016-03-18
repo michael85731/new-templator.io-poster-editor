@@ -94,7 +94,7 @@ img.pic{
 }
 
 .ui-resizable-handle{
-    z-index: 1;
+    z-index: 1; /*永遠顯示在物件的最上層*/
 }
 
 </style>
@@ -167,7 +167,7 @@ $(document).ready(function(){
     draggableAll();
     $(".posterArea").on('dblclick mousedown resize click keypress mouseup',function(event){
 
-        //更新目前選取的element
+        //紀錄目前選取的element
         if($(event.target).attr('class') != 'posterArea'){  //不能選到自己
             if($(event.target).hasClass('text')){
                 textSelected = true;
@@ -242,11 +242,6 @@ $(document).ready(function(){
                 toDiv(lastTextarea);
             }
         }
-
-        // //若dragging結束後有物件為hidden，則刪除該物件(處理drag event)
-        // if(event.type == 'mouseup'){
-        //     eliminateOrigin();
-        // }
     });
 
     //鍵盤事件區
