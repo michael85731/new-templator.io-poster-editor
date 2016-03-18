@@ -11,13 +11,13 @@ function transToTextarea(target){
 	$(target).replaceWith(editText);	//now target replace to editText
 	
 	//紀錄已經存在於海報，設定origin為原本element的origin；並在setTextareaStyle中用於設定element的top,left
-	editText.exist = true;
-	editText.origin = target.origin;
+	$(editText)[0].exist = true;
+	$(editText)[0].origin = $(target)[0].origin;
 	setTextareaStyle(editText);
 	
 	//set focus
 	$(editText).focus();
-	setLastCharFocus(editText,target.origin.text);	//focus on last character
+	setLastCharFocus(editText,$(target)[0].origin.text);	//focus on last character
 
 	setConvertDiv(editText);	//讓目前textarea能轉成div
 }
@@ -51,7 +51,7 @@ function toDiv(target){
 	var content = $(target).html().replace(/\n/,'<br>'); 	//因為div只能讀<br>,所以將textarea中的\n換成<br>
 
 	var newDiv = $('<div />');
-	newDiv.origin = target.origin; 	//繼承原element的origin
+	$(newDiv)[0].origin = $(target)[0].origin; 	//繼承原element的origin
 	$(target).replaceWith(newDiv);
 
 	if(content == ''){
@@ -60,8 +60,8 @@ function toDiv(target){
 		$(newDiv).html(content);
 
 		//若目前element存在，則不需重新設定element's tope %&left
-		if(target.exist){
-			newDiv.exist = true;
+		if($(target)[0].exist){
+			$(newDiv)[0].exist = true;
 		}
 
 		setOriginTextStyle(newDiv);

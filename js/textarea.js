@@ -1,5 +1,6 @@
 //設定既有文字的textarea樣式
 function setTextareaStyle(target){
+	target = $(target)[0]; //取到原本的element而非jquery Object
 	$(target).addClass('input');
 
 	$(target).css({

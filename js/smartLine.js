@@ -91,12 +91,12 @@ function checkSmart(target,resize){
 
 //把參考線show出來
 function showSmartLine(smartLine){
-	// $(smartLine).css({'border':'1px dashed blue','visibility':'visible'});
+	$(smartLine).css({'border':'1px dashed blue','visibility':'visible'});
 }
 
 //隱藏參考線
 function hideSmartLine(){
-	// $('.smart').css('visibility','hidden');
+	$('.smart').css('visibility','hidden');
 }
 
 //clone origin element and hide origin one

@@ -20,6 +20,8 @@ function addText(){
 
 //處理text css
 function setOriginTextStyle(target){
+	target = $(target)[0];	////取到原本的element而非jquery Object
+
 	$(target).addClass('text');
 	if(target.exist){
 		$(target).css({
