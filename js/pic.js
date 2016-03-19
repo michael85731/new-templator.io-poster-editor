@@ -1,5 +1,5 @@
 //讀取圖片
-function loadPic(target){
+function addPic(target){
 	if(target.files[0]){
 		//create blob object
 		var blob = new Blob([target.files[0]],{type:target.files[0].type});
