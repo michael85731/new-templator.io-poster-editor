@@ -83,6 +83,7 @@ function resizable(target){
 					createSmart(event.target);
 				}
 				adjustSmart(event.target);
+				hideSmartLine();
 				
 				if($('.mirror').length){
 					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代

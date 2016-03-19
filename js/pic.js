@@ -1,30 +1,27 @@
 //讀取圖片
 function loadPic(target){
 	if(target.files[0]){
-		var reader = new FileReader();
-		reader.onload = addPic;
-		reader.readAsDataURL(target.files[0]);
+		//create blob object
+		var blob = new Blob([target.files[0]],{type:target.files[0].type});
+		var url = URL.createObjectURL(blob);
+
+		$('.picFilter').attr('src',url); 	//change filter preview
+
+		var newPic = $('<img />');
+		$(newPic).attr('src',url);
+		$(newPic).addClass('pic');
+
+		//due to jquery's restriction, i have to create a container to display img element. otherwhise image can't being able to drag and resize.
+		var picContainer = $("<div />");
+		$(picContainer).css("display","inline-block");
+		$(picContainer).append(newPic);
+		$(picContainer).addClass('pic');
+
+		singleDraggable(picContainer);
+		singleResizable(picContainer);
+
+		$('.posterArea').append(picContainer);
 	}
-}
-
-//讀取完將圖片加到posterArea
-function addPic(event){
-	$('.picFilter').attr('src',event.target.result); 	//change filter preview
-
-	var newPic = $('<img />');
-	$(newPic).attr('src',event.target.result);
-	$(newPic).addClass('pic');
-
-	//due to jquery's restriction, i have to create a container to display img element. otherwhise image can't being able to drag and resize.
-	var picContainer = $("<div />");
-	$(picContainer).css("display","inline-block");
-	$(picContainer).append(newPic);
-	$(picContainer).addClass('pic');
-
-	singleDraggable(picContainer);
-	singleResizable(picContainer);
-
-	$('.posterArea').append(picContainer);
 }
 
 //改變圖片濾鏡
