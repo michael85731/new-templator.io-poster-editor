@@ -39,9 +39,11 @@ function singleResizable(target){
 	//移除所有resizable element，避免重複resizable，以及將目前仍為textarea的element轉成div text
 	cancelResizableElement();
 	forceToDiv();
+	//隱藏所有的rotate point
+	hideRotatePoint();
 
 	resizable(target);
-	rotatable(target);
+	$(target).children('.rotatePoint').css('visibility','visible'); //show rotatePoint
 }
 
 //讓多個taget變成resizable
@@ -89,6 +91,8 @@ function resizable(target){
 				}
 				adjustSmart(event.target);
 				hideSmartLine();
+				
+				adjustRotate(event.target);
 				
 				if($('.mirror').length){
 					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代

@@ -4,6 +4,8 @@ function draggableAll(){
 		switch(event.type){
 			case 'dragcreate':
 				createSmart(event.target);
+
+				createRotate(event.target);
 				break;
 			case 'drag':
 				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
@@ -16,6 +18,8 @@ function draggableAll(){
 				}
 				adjustSmart(event.target);
 				hideSmartLine();
+				
+				adjustRotate(event.target);
 
 				if($('.mirror').length){
 					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代
@@ -32,6 +36,8 @@ function singleDraggable(target){
 		switch(event.type){
 			case 'dragcreate':
 				createSmart(event.target);
+
+				createRotate(event.target);
 				break;
 			case 'drag':
 				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
@@ -44,6 +50,8 @@ function singleDraggable(target){
 				}
 				adjustSmart(event.target);
 				hideSmartLine();
+
+				adjustRotate(event.target);
 				
 				if($('.mirror').length){
 					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代

@@ -40,6 +40,7 @@ body{
 }
 
 .text {
+    font-size: 1em;
     position: absolute;
     cursor: default;
     border:1px solid black;
@@ -242,10 +243,11 @@ $(document).ready(function(){
             transToTextarea(event.target);
         }
 
-        //若滑鼠點到poster背景，則取消所有resizable element，並將textarea轉成div text
+        //若滑鼠點到poster背景，則取消所有resizable&rotatble element，並將textarea轉成div text
         if($(event.target).hasClass('posterArea')){
             cancelResizableElement();
             hideSmartLine();
+            hideRotatePoint();
             if($('.input').length){
                 var lastTextarea = $('.input');
                 lastTextarea.exist = true;
