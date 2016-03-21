@@ -150,6 +150,8 @@ function mirror(target,position,positionData,resize,resizeData){
 			}
 			break;
 	}
+
+	fixResizePoint($('.mirror')[0]);
 }
 
 //remove mirror

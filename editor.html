@@ -20,6 +20,7 @@
 <script type="text/javascript" src="js/Origin.js"></script>
 <script type="text/javascript" src="js/keyboard.js"></script>
 <script type="text/javascript" src="js/smartLine.js"></script>
+<script type="text/javascript" src="js/rotate.js"></script>
 
 <!-- ////////////////////////////// CSS //////////////////////////////////////// -->
 
@@ -94,6 +95,12 @@ img.pic{
 
 .ui-resizable-handle{
     z-index: 1; /*永遠顯示在物件的最上層*/
+}
+
+.rotate{
+  /*  visibility: hidden;*/
+    position: absolute;
+    border:1px solid blue;
 }
 
 </style>
@@ -173,10 +180,13 @@ $(document).ready(function(){
             }else if($(event.target).hasClass('pic')){
                 picSelected = true;
             }else{
-                textSelected = false;
+                textSelected = false;   //選到其他地方
                 picSelected = false;
             }
-        }   
+        }else{
+            textSelected = false;   //選到posterArea
+            picSelected = false;
+        } 
 
         //點到元件要讓該元件能resizable，並取消其他multi class element
         if((textSelected || picSelected) && event.type == 'mousedown' && !(event.ctrlKey) && !($(event.target).hasClass('multi'))){

@@ -17,6 +17,8 @@ function resizeText(target){
 	if(adjustment != 0){
 		$(target).css("font-size",result);
 	}
+
+	fixResizePoint(target);
 }
 
 //當IMG觸發resize事件時，能跟著變動pic size
@@ -27,6 +29,8 @@ function resizePic(target){
 	var pic = target.firstChild;
 	$(pic).height(nowHeight);
 	$(pic).width(nowWidth);
+
+	fixResizePoint(target);
 }
 
 
@@ -37,6 +41,7 @@ function singleResizable(target){
 	forceToDiv();
 
 	resizable(target);
+	rotatable(target);
 }
 
 //讓多個taget變成resizable
@@ -66,7 +71,7 @@ function resizable(target){
 		styleName = styleName + direction[i];
 
 		controlPoint.addClass(styleName);
-		controlPoint.attr("id",direction[i]+"grip");
+		controlPoint.addClass(direction[i]+"gripStyle"); 	//加上另外的class是因為還要加上一些css的變化，直接覆寫class會蓋掉原本jQuery UI的設定
 		$(target).append(controlPoint);
 	}
 
@@ -95,20 +100,32 @@ function resizable(target){
 	$(target).resizable({
 		alsoResize: '.multi',
 		handles:{
-			'nw': '#nwgrip',
-			'ne': '#negrip',
-			'sw': '#swgrip',
-			'se': '#segrip',
-			'n': '#ngrip',
-			'e': '#egrip',
-			's': '#sgrip',
-			'w': '#wgrip'
+			'nw': '.nwgripStyle',
+			'ne': '.negripStyle',
+			'sw': '.swgripStyle',
+			'se': '.segripStyle',
+			'n': '.ngripStyle',
+			'e': '.egripStyle',
+			's': '.sgripStyle',
+			'w': '.wgripStyle'
 		}
 	});
+
+	fixResizePoint(target);
 
 	//record text(div) target.origin css, and make sure target.origin won't update
 	if($(target)[0].origin == null){
 		initElementOrigin(target);
+	}
+}
+
+//fix n,e,s,w position，因為設定50%是設定原點而非正確的位置
+function fixResizePoint(target){
+	if($(target).css('visibility') == 'visible'){ 	//因為有mirror時也會連帶調整原本的element，而使mirror上的resize point位置不對。要只調整mirror的resize point就必須指定target必須是visible
+		$('.ngripStyle').css('left',$(target).width() / 2 - parseFloat($('.ngripStyle').css('width').slice(0,-2)) / 2);
+		$('.egripStyle').css('top',$(target).height() / 2 - parseFloat($('.egripStyle').css('height').slice(0,-2)) / 2);
+		$('.sgripStyle').css('left',$(target).width() / 2 - parseFloat($('.sgripStyle').css('width').slice(0,-2)) / 2);
+		$('.wgripStyle').css('top',$(target).height() / 2 - parseFloat($('.wgripStyle').css('height').slice(0,-2)) / 2);
 	}
 }
 

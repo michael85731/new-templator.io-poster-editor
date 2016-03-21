@@ -17,10 +17,10 @@ function addPic(target){
 		$(picContainer).append(newPic);
 		$(picContainer).addClass('pic');
 
+		$('.posterArea').append(picContainer); 	//先append，不然fixResizePoint會抓不到resizePoint
+
 		singleDraggable(picContainer);
 		singleResizable(picContainer);
-
-		$('.posterArea').append(picContainer);
 	}
 }
 
