@@ -83,6 +83,7 @@ function resizable(target){
 			case 'resize':
 				removeSmart(event.target); 		//不要檢查到自己，所以先把自己的smartLine刪除
 				checkSmart(event.target,true); 	//送一個識別resizing的參數
+				adjustRotate(event.target); 	//調整rotate point
 				break;
 			case 'resizestop':
 				//幫原來的原件(target)加上smartLine，因為resize時刪掉了
@@ -91,8 +92,6 @@ function resizable(target){
 				}
 				adjustSmart(event.target);
 				hideSmartLine();
-				
-				adjustRotate(event.target);
 				
 				if($('.mirror').length){
 					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代

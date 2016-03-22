@@ -98,12 +98,6 @@ img.pic{
     z-index: 1; /*永遠顯示在物件的最上層*/
 }
 
-.rotate{
-  /*  visibility: hidden;*/
-    position: absolute;
-    border:1px solid blue;
-}
-
 </style>
 
 <!-- ///////////////////////////// html /////////////////////////////// -->
@@ -137,7 +131,7 @@ img.pic{
 </div>
 
 <div style="float:left;clear:both;">others3</div>
-<div id="testing" style="float:left;clear:both;">others4</div>
+<div style="float:left;clear:both;">others4</div>
 
 </body>
 
@@ -214,6 +208,11 @@ $(document).ready(function(){
             }
 
             multiDraggable();   //若再次點到multi class element即可直接draggable，因為前一次點到element時就設定了
+        }
+
+        //按下rotate point的動作
+        if(event.type == 'mousedown' && $(event.target).hasClass('rotatePoint')){
+            rotating(event.target);
         }
 
         //resizing時的動作
