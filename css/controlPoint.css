@@ -3,6 +3,7 @@
     height: 10px;
     background-color: #ffffff;
     border: 1px solid #000000;
+    z-index: 1;                 /*永遠顯示在物件的最上層*/
 }
 .rotatePoint{
     position: absolute;

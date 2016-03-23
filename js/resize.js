@@ -39,8 +39,8 @@ function singleResizable(target){
 	//移除所有resizable element，避免重複resizable，以及將目前仍為textarea的element轉成div text
 	cancelResizableElement();
 	forceToDiv();
-	//隱藏所有的rotate point
-	hideRotatePoint();
+	//移除所有的rotate point
+	cancelRotatePoint();
 
 	resizable(target);
 	$(target).children('.rotatePoint').css('visibility','visible'); //show rotatePoint
@@ -78,13 +78,8 @@ function resizable(target){
 	}
 
 	//set smartLine，不用偵測resizecreate是因為在element新增時就已經在draggable中加上smartLine了，所以不用再createSmart
-	$(target).on('resizecreate resize resizestop',function(event,ui){
+	$(target).on('resize resizestop',function(event,ui){
 		switch(event.type){
-			case 'resizecreate':
-	 			if(typeof(event.target.center) == 'undefined'){
-					createRotate(event.target);
-				}
-				break;
 			case 'resize':
 				removeSmart(event.target); 		//不要檢查到自己，所以先把自己的smartLine刪除
 				checkSmart(event.target,true); 	//送一個識別resizing的參數

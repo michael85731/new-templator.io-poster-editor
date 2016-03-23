@@ -94,10 +94,6 @@ img.pic{
     border:1px solid blue;
 }
 
-.ui-resizable-handle{
-    z-index: 1; /*永遠顯示在物件的最上層*/
-}
-
 .tempDiv{
     height: 5px;
     width: 5px;
@@ -194,9 +190,11 @@ $(document).ready(function(){
             switch(event.target.tagName){
                 case 'IMG':
                     singleResizable($(event.target).parent());
+                    rotatable($(event.target).parent());
                     break;
                 case 'DIV':
                     singleResizable(event.target);
+                    rotatable(event.target);
                     break;
             }
         }
@@ -218,7 +216,6 @@ $(document).ready(function(){
 
         //按下rotate point的動作
         if(event.type == 'mousedown' && $(event.target).hasClass('rotatePoint')){
-            console.log($(event.target).parent()[0].center.x + ' | ' + $(event.target).parent()[0].center.y);
             rotating(event.target);
         }
 
@@ -252,8 +249,8 @@ $(document).ready(function(){
         //若滑鼠點到poster背景，則取消所有resizable&rotatble element，並將textarea轉成div text
         if($(event.target).hasClass('posterArea')){
             cancelResizableElement();
+            cancelRotatePoint();
             hideSmartLine();
-            hideRotatePoint();
             if($('.input').length){
                 var lastTextarea = $('.input');
                 lastTextarea.exist = true;

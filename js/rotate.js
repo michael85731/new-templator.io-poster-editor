@@ -1,12 +1,12 @@
 //rotate point跟原物件的距離
 var rotatePointDistance = 30;
 
-function createRotate(target){
+function rotatable(target){
 	//新增rotate point
 	var rotatePoint = $('<div />');
 	$(rotatePoint).addClass('rotatePoint');
 	$(target).append(rotatePoint);
-	$(rotatePoint).css({'top':0 - rotatePointDistance,'left':0 + ($(target).width() / 2) - (parseFloat($('.rotatePoint').css('width').slice(0,-2)) / 2),'visibility':'hidden'});
+	$(rotatePoint).css({'top':0 - rotatePointDistance,'left':0 + ($(target).width() / 2) - (parseFloat($('.rotatePoint').css('width').slice(0,-2)) / 2)});
 
 
 	//取得斜線兩點的座標
@@ -16,11 +16,6 @@ function createRotate(target){
 	//建立中心
 	var center = {x:(nw.left + se.left) / 2, y:(nw.top + se.top) / 2};
 	$(target)[0].center = center;
-
-	var tempDiv = $('<div />');
-	$(tempDiv).addClass('tempDiv');
-	$('body').append(tempDiv);
-	$(tempDiv).offset({top:center.y,left:center.x});
 
 }
 
@@ -35,13 +30,11 @@ function adjustRotate(target){
 
 	//adjust coordinate
 	$(target)[0].center = {x:(nw.left + se.left) / 2, y:(nw.top + se.top) / 2};
-
-	$('.tempDiv').offset({top:$(target)[0].center.y,left:$(target)[0].center.x});
 }
 
 //hide rotate point
-function hideRotatePoint(){
-	$('.rotatePoint').css('visibility','hidden');
+function cancelRotatePoint(){
+	$('.rotatePoint').remove();
 }
 
 //計算角度
@@ -57,7 +50,6 @@ function rotating(target){
 	$(document).on('mousemove mouseup',function(event){
 		switch(event.type){
 			case 'mousemove':
-				console.log($(target).parent()[0].center.x + ' | ' + $(target).parent()[0].center.y);
 				var mousePosition = {x:event.pageX,y:event.pageY};
 				var angel = positionAngel($(target).parent()[0].center,mousePosition);
 				$(target).parent().css({
