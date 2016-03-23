@@ -4,10 +4,6 @@ function draggableAll(){
 		switch(event.type){
 			case 'dragcreate':
 				createSmart(event.target);
-
-	 			if(typeof(event.target.center) == 'undefined'){
-					createRotate(event.target);
-				}
 				break;
 			case 'drag':
 				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除

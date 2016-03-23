@@ -2,34 +2,41 @@
 var rotatePointDistance = 30;
 
 function createRotate(target){
-	var top = parseFloat($(target).css('top').slice(0,-2));
-	var left = parseFloat($(target).css('left').slice(0,-2));
-
 	//新增rotate point
 	var rotatePoint = $('<div />');
 	$(rotatePoint).addClass('rotatePoint');
 	$(target).append(rotatePoint);
 	$(rotatePoint).css({'top':0 - rotatePointDistance,'left':0 + ($(target).width() / 2) - (parseFloat($('.rotatePoint').css('width').slice(0,-2)) / 2),'visibility':'hidden'});
 
-	//建立原點
-	var center = {x:$(target).offset().left + ($(target).width() / 2),y:$(target).offset().top + ($(target).height() / 2)};
+
+	//取得斜線兩點的座標
+	var nw = $(target).children('.nwgripStyle').offset();
+	var se = $(target).children('.segripStyle').offset();
+
+	//建立中心
+	var center = {x:(nw.left + se.left) / 2, y:(nw.top + se.top) / 2};
 	$(target)[0].center = center;
+
+	var tempDiv = $('<div />');
+	$(tempDiv).addClass('tempDiv');
+	$('body').append(tempDiv);
+	$(tempDiv).offset({top:center.y,left:center.x});
+
 }
 
 //調整target的中心點、rotate line、rotate point
 function adjustRotate(target){
-	var top = parseFloat($(target).css('top').slice(0,-2));
-	var left = parseFloat($(target).css('left').slice(0,-2));
-
 	//adjust rotate Point
 	$(target).children('.rotatePoint').css({'top':0 - rotatePointDistance,'left':0 + ($(target).width() / 2) - (parseFloat($('.rotatePoint').css('width').slice(0,-2)) / 2)});
 
-	//adjust rotate line
-	$(target).children('.rotate.x').css({'top':0 - top - 2,'left':0 + ($(target).width() / 2)});
-	$(target).children('.rotate.y').css({'top':0 + ($(target).height() / 2),'left':0 - left - 2});
-	
+	//取得斜線兩點的座標
+	var nw = $(target).children('.nwgripStyle').offset();
+	var se = $(target).children('.segripStyle').offset();
+
 	//adjust coordinate
-	$(target)[0].center = {x:$(target).offset().left + ($(target).width() / 2),y:$(target).offset().top + ($(target).height() / 2)};
+	$(target)[0].center = {x:(nw.left + se.left) / 2, y:(nw.top + se.top) / 2};
+
+	$('.tempDiv').offset({top:$(target)[0].center.y,left:$(target)[0].center.x});
 }
 
 //hide rotate point

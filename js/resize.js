@@ -78,12 +78,16 @@ function resizable(target){
 	}
 
 	//set smartLine，不用偵測resizecreate是因為在element新增時就已經在draggable中加上smartLine了，所以不用再createSmart
-	$(target).on('resize resizestop',function(event,ui){
+	$(target).on('resizecreate resize resizestop',function(event,ui){
 		switch(event.type){
+			case 'resizecreate':
+	 			if(typeof(event.target.center) == 'undefined'){
+					createRotate(event.target);
+				}
+				break;
 			case 'resize':
 				removeSmart(event.target); 		//不要檢查到自己，所以先把自己的smartLine刪除
 				checkSmart(event.target,true); 	//送一個識別resizing的參數
-				
 				adjustRotate(event.target); 	//調整rotate point
 				break;
 			case 'resizestop':
