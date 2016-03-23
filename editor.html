@@ -212,6 +212,7 @@ $(document).ready(function(){
 
         //按下rotate point的動作
         if(event.type == 'mousedown' && $(event.target).hasClass('rotatePoint')){
+            console.log($(event.target).parent()[0].center.x + ' | ' + $(event.target).parent()[0].center.y);
             rotating(event.target);
         }
 

@@ -83,6 +83,7 @@ function resizable(target){
 			case 'resize':
 				removeSmart(event.target); 		//不要檢查到自己，所以先把自己的smartLine刪除
 				checkSmart(event.target,true); 	//送一個識別resizing的參數
+				
 				adjustRotate(event.target); 	//調整rotate point
 				break;
 			case 'resizestop':

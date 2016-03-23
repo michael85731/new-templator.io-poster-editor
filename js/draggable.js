@@ -1,11 +1,13 @@
-//讓所有posterArea裡面的原件都能draggable
+//讓所有posterArea裡面的原件都能draggable，並寫出所有drag類的偵測事件
 function draggableAll(){
 	$('.posterArea').children('div').on('drag dragcreate dragstop',function(event,ui){
 		switch(event.type){
 			case 'dragcreate':
 				createSmart(event.target);
 
-				createRotate(event.target);
+	 			if(typeof(event.target.center) == 'undefined'){
+					createRotate(event.target);
+				}
 				break;
 			case 'drag':
 				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
@@ -32,33 +34,6 @@ function draggableAll(){
 
 //讓新產生的div能有draggable的效果
 function singleDraggable(target){
-	$(target).on('drag dragcreate dragstop',function(event,ui){
-		switch(event.type){
-			case 'dragcreate':
-				createSmart(event.target);
-
-				createRotate(event.target);
-				break;
-			case 'drag':
-				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
-				checkSmart(event.target);
-				break;
-			case 'dragstop':
-				//幫原來的原件(target)加上smartLine，因為drag時刪掉了
-				if(!($(event.target).children().hasClass('smart'))){
-					createSmart(event.target);
-				}
-				adjustSmart(event.target);
-				hideSmartLine();
-
-				adjustRotate(event.target);
-				
-				if($('.mirror').length){
-					replaceMirrorToReal(event.target); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代
-				}	
-				break;
-		}
-	});
 	$(target).draggable();
 }
 

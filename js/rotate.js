@@ -46,10 +46,11 @@ function positionAngel(center,rotate){
 //將本體draggable取消，並用滑鼠目前位置計算實際rotate point的角度
 function rotating(target){
 	$(target).parent().draggable('destroy');
-	
+
 	$(document).on('mousemove mouseup',function(event){
 		switch(event.type){
 			case 'mousemove':
+				console.log($(target).parent()[0].center.x + ' | ' + $(target).parent()[0].center.y);
 				var mousePosition = {x:event.pageX,y:event.pageY};
 				var angel = positionAngel($(target).parent()[0].center,mousePosition);
 				$(target).parent().css({
