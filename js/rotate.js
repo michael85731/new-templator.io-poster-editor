@@ -8,7 +8,6 @@ function rotatable(target){
 	$(target).append(rotatePoint);
 	$(rotatePoint).css({'top':0 - rotatePointDistance,'left':0 + ($(target).width() / 2) - (parseFloat($('.rotatePoint').css('width').slice(0,-2)) / 2)});
 
-
 	//取得斜線兩點的座標
 	var nw = $(target).children('.nwgripStyle').offset();
 	var se = $(target).children('.segripStyle').offset();

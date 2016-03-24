@@ -106,6 +106,7 @@ function mirror(target,position,positionData,resize,resizeData){
 		var mirror = $(target).clone();
 		$(mirror).addClass('mirror');
 		$('.posterArea').append(mirror);
+		$(mirror)[0].origin = $(target)[0].origin; 	//繼承原物件的origin，在resizeText的時候才能正確顯示文字大小
 
 		//有圖片的話，因為分container跟img，所以img要加上mirror class，resize跟drag時才能正確顯示(下面的調整才能正確執行)
 		if($(target).children('img').length){
@@ -151,7 +152,14 @@ function mirror(target,position,positionData,resize,resizeData){
 			break;
 	}
 
-	fixResizePoint($('.mirror')[0]);
+	//resize時mirror的font-size大小也要跟著變
+	if(resize){
+		resizeText($('.mirror'));
+	}
+
+
+	fixResizePoint($('.mirror')[0]); 	//resize時會跟著調整resize point
+	adjustRotate($('.mirror')[0]);		//調整rotate point
 }
 
 //remove mirror
@@ -215,6 +223,7 @@ function replaceMirrorToReal(old){
 	$('.mirror').children().remove('.ui-resizable-handle');
 	singleDraggable($('div.mirror')[0]);
 	singleResizable($('div.mirror')[0]);
+	rotatable($('div.mirror')[0]);
 	$('.mirror').removeClass('mirror');
 	$(old).remove();
 }

@@ -13,12 +13,10 @@ function resizeText(target){
 	var unit = $(target).css("font-size").slice(-2);
 
 	var result = parseFloat($(target)[0].origin.size.slice(0,-2) * adjustment) + unit;
-
+	
 	if(adjustment != 0){
 		$(target).css("font-size",result);
 	}
-
-	fixResizePoint(target);
 }
 
 //當IMG觸發resize事件時，能跟著變動pic size
@@ -29,8 +27,6 @@ function resizePic(target){
 	var pic = target.firstChild;
 	$(pic).height(nowHeight);
 	$(pic).width(nowWidth);
-
-	fixResizePoint(target);
 }
 
 
@@ -88,6 +84,7 @@ function resizable(target){
 				removeSmart(event.target); 		//不要檢查到自己，所以先把自己的smartLine刪除
 				checkSmart(event.target,true); 	//送一個識別resizing的參數
 				adjustRotate(event.target); 	//調整rotate point
+				fixResizePoint(event.target);	//調整resize point
 				break;
 			case 'resizestop':
 				//幫原來的原件(target)加上smartLine，因為resize時刪掉了

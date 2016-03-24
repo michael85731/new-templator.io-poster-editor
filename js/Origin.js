@@ -13,7 +13,7 @@ function Origin(top,left,width,height,text,color,size,letterSpacing,lineHeight){
 function initElementOrigin(target){
 	$(target)[0].origin = new Origin($(target).position().top,$(target).position().left
 		,$(target).width(),$(target).height()
-		,$(target).html().replace(/<br>/g,'\n')
+		,$(target).html().replace(/<br>/g,'\n').replace(/<[^>]*>/g, "")
 		,$(target).css('color'),$(target).css('font-size')
 		,$(target).css('letter-spacing'),$(target).css('line-height'));
 }

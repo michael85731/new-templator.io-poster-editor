@@ -21,6 +21,7 @@ function addPic(target){
 
 		singleDraggable(picContainer);
 		singleResizable(picContainer);
+		rotatable(picContainer);
 	}
 }
 

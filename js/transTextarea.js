@@ -1,8 +1,9 @@
 //轉為textarea
 function transToTextarea(target){
-	cancelResizableElement(); 	//取消resize point,避免html()時會取到resize point
+	//取消各類輔助(rotate,resize,smartLine)，避免html()會取到不相關的資料
+	cancelResizableElement();
 	cancelRotatePoint();
-	removeSmart(target);		//取消smartLine，一樣避免html()時會取到smartLine
+	removeSmart(target);
 
 	//初始化原來element的origin
 	initElementOrigin(target);
