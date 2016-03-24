@@ -193,7 +193,7 @@ $(document).ready(function(){
                     rotatable($(event.target).parent());
                     break;
                 case 'DIV':
-                    singleResizable(event.target);
+                    singleResizable(event.target,event.pageX,event.pageY);
                     rotatable(event.target);
                     break;
             }

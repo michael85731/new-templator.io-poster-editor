@@ -35,15 +35,19 @@ function resizePic(target){
 
 
 //讓taget變成resizable
-function singleResizable(target){
+function singleResizable(target,mouseX,mouseY){
+	//記錄滑鼠跟target的差距，用於在drag時設定object正確的position
+	$(target)[0].mouseDiffX = mouseX - $(target).offset().left;
+	$(target)[0].mouseDiffY = mouseY - $(target).offset().top;	
+
 	//移除所有resizable element，避免重複resizable，以及將目前仍為textarea的element轉成div text
 	cancelResizableElement();
 	forceToDiv();
+
 	//移除所有的rotate point
 	cancelRotatePoint();
 
 	resizable(target);
-	$(target).children('.rotatePoint').css('visibility','visible'); //show rotatePoint
 }
 
 //讓多個taget變成resizable

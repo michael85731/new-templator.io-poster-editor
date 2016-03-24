@@ -1,15 +1,21 @@
 //讓所有posterArea裡面的原件都能draggable，並寫出所有drag類的偵測事件
 function draggableAll(){
-	$('.posterArea').children('div').on('drag dragcreate dragstop',function(event,ui){
+	$('.posterArea').children('div').on('mousemove drag dragcreate dragstop',function(event,ui){
 		switch(event.type){
 			case 'dragcreate':
 				createSmart(event.target);
 				break;
 			case 'drag':
+				//set right position of object
+				$(document).on('mousemove',function(mouseEvent){
+					$(event.target).offset({top:mouseEvent.pageY - $(event.target)[0].mouseDiffY,left:mouseEvent.pageX - $(event.target)[0].mouseDiffX});
+				})
+
 				removeSmart(event.target); 	//不要檢查到自己，所以先把自己的smartLine刪除
 				checkSmart(event.target);
 				break;
 			case 'dragstop':
+				$(document).off('mousemove');
 				//如果已經有smart element存在則不用再新增
 				if(!($(event.target).children().hasClass('smart'))){
 					createSmart(event.target);
