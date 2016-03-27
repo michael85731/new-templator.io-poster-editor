@@ -184,6 +184,20 @@ $(document).ready(function(){
                 hideSmartLine();
             }
 
+            //若有multi並按下resize point時的動作
+            if($(event.target).hasClass('ui-resizable-handle') && $('.multi').length){
+                
+                //紀錄每個物件現在的top,left,right,bottom
+                $('.multi').each(function(){
+                    $(this)[0].lastTop = $(this).offset().top;
+                    $(this)[0].lastLeft = $(this).offset().left;
+                    $(this)[0].lastWidth = $(this).width();
+                    $(this)[0].lastHeight = $(this).height();
+                });
+
+                multiResizing();
+            }
+
             //按下rotate point的動作
             if($(event.target).hasClass('rotatePoint')){
                 rotating(event.target);
@@ -247,46 +261,29 @@ $(document).ready(function(){
                 //沒選過的element設定
                 switch($(event.target).hasClass('pic')){
                     case true:
+                        setRelative($(event.target).parent());  //設定target的position為relative，避免dragging時的位置跑掉
                         multiResizable($(event.target).parent());
                         multiRotatable($(event.target).parent());
                         break;
                     case false:
+                        setRelative(event.target);  //設定target的position為relative，避免dragging時的位置跑掉
                         multiResizable(event.target);
                         multiRotatable(event.target);
                         break;
                 }
 
                 $('.ui-resizable-handle').parent().addClass('multi');   //辨別目前要reisze的所有元件，加上一個class做判斷(不用event.target是因為第一次點及不一定會按ctrl)
+                multiDraggable();
             }
             
         }
 
-        if(event.type == 'mousedown' && $(event.target).hasClass('multi')){
-
-            setRelative(event.target);              //設定target的position為relative，避免dragging時的位置跑掉
-
+        if(event.type == 'mousedown' && ($(event.target).hasClass('multi')) || $(event.target).parent().hasClass('multi')){
             //紀錄目前所有multi element的位置
             $('.multi').each(function(){
                 $(this)[0].lastTop = $(this).offset().top;
                 $(this)[0].lastLeft = $(this).offset().left;
             });
-
-            multiDraggable();
-
-        }else if(event.type == 'mousedown' && $(event.target).parent().hasClass('multi')){
-
-            setRelative($(event.target).parent());  //設定target的position為relative，避免dragging時的位置跑掉
-            
-            //紀錄目前所有multi element的位置
-            $('.multi').each(function(){
-                $(this)[0].lastTop = $(this).offset().top;
-                $(this)[0].lastLeft = $(this).offset().left;
-            });
-
-            multiDraggable();
-
-        }else{
-            // do nothing
         }
 
 

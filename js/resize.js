@@ -30,6 +30,43 @@ function multiResizable(target){
 	resizable(target);
 }
 
+function multiResizing(){
+	$('.multi').on('resize resizestop',function(event){
+
+		switch(event.type){
+			case 'resize':
+				//計算各類offset
+				var offsetTop  = $(event.target).offset().top - $(event.target)[0].lastTop;
+				var offsetLeft = $(event.target).offset().left - $(event.target)[0].lastLeft;
+				var offsetWidth = $(event.target).width() - $(event.target)[0].lastWidth;
+				var offsetHeight = $(event.target).height() - $(event.target)[0].lastHeight;
+
+				$('.multi').each(function(){
+					//調整位置大小
+					$(this).offset({top:$(this)[0].lastTop + offsetTop, left:$(this)[0].lastLeft + offsetLeft});
+					$(this).height($(this)[0].lastHeight + offsetHeight);
+					$(this).width($(this)[0].lastWidth + offsetWidth);
+
+					//smartLine & rotatePoint & fixResize point position
+					removeSmart($(this)[0]); 		//不要檢查到自己，所以先把自己的smartLine刪除
+					adjustRotate($(this)[0]); 	//調整rotate point
+					fixResizePoint($(this)[0]);	//調整resize point
+
+					//調整文字
+					resizeText($(this)[0]);
+				});
+				break;
+			case 'resizestop':
+				$('.multi').each(function(){
+					if(!($(this).children().hasClass('smart'))){
+						createSmart($(this)[0]);
+					}
+				});
+				break;
+		}
+	});
+}
+
 function resizable(target){
 
 	var direction = ["nw","ne","sw","se","n","s","e","w"];

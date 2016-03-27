@@ -66,7 +66,6 @@ function multiDraggable(){
 					if(!($(this).children().hasClass('smart'))){
 						createSmart($(this)[0]);
 					}
-
 					hideSmartLine();
 					
 					adjustRotate($(this)[0]);
@@ -77,8 +76,8 @@ function multiDraggable(){
 				});
 				break;
 		}
+		
 	});
-
 }
 
 //set target's position is relative，避免target在drag時的位置跑掉
