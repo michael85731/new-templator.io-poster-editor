@@ -1,6 +1,15 @@
 //rotate point跟原物件的距離
 var rotatePointDistance = 30;
 
+function singleRotatable(target){
+	cancelRotatePoint();	//移除所有的rotate point
+	rotatable(target);
+}
+
+function multiRotatable(target){
+	rotatable(target);
+}
+
 function rotatable(target){
 	//新增rotate point
 	var rotatePoint = $('<div />');
@@ -15,7 +24,6 @@ function rotatable(target){
 	//建立中心
 	var center = {x:(nw.left + se.left) / 2, y:(nw.top + se.top) / 2};
 	$(target)[0].center = center;
-
 }
 
 //調整target的中心點、rotate line、rotate point

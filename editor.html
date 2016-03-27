@@ -3,6 +3,8 @@
 <head>
 <!-- meta info -->
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv='cache-control' content='no-cache'>
+
 <!-- import js & css -->
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="css/controlPoint.css">
@@ -48,14 +50,14 @@ body{
     /*line-height: 50px;*/
 }
 
-.pic{
+.picContainer{
     position: absolute;
     height:150px;
     width:150px;
 }
 
-img.pic{
-    height: 100%;
+.pic{
+    height: 100%;   /*設定跟parent一樣大，這樣在resize或mirror時就不用特別調整了*/
     width: 100%;
     display: block;
     overflow: auto;
@@ -168,95 +170,152 @@ $(document).ready(function(){
 
     //posterArea's event setting
     draggableAll();
-    $(".posterArea").on('dblclick mousedown resize click keypress mouseup',function(event){
+    $(".posterArea").on('dblclick mousedown resize',function(event){
 
-        //紀錄目前選取的element
-        if($(event.target).attr('class') != 'posterArea'){  //不能選到自己
-            if($(event.target).hasClass('text')){
-                textSelected = true;
-            }else if($(event.target).hasClass('pic')){
-                picSelected = true;
-            }else{
-                textSelected = false;   //選到其他地方
-                picSelected = false;
+        forceToDivText();   //只要有textarea就先轉成div text
+        absoluteAll();      //把所有element的position回復成absolute
+
+        if($(event.target).hasClass('posterArea') || $(event.target).hasClass('ui-resizable-handle') || $(event.target).hasClass('rotatePoint')){
+            
+            //若滑鼠點到poster背景，則取消所有resizable&rotatble element，將textarea轉成div text
+            if($(event.target).hasClass('posterArea')){    
+                cancelResizableElement();
+                cancelRotatePoint();
+                hideSmartLine();
             }
-        }else{
-            textSelected = false;   //選到posterArea
-            picSelected = false;
-        } 
 
-        //點到元件要讓該元件能resizable，並取消其他multi class element
-        if((textSelected || picSelected) && event.type == 'mousedown' && !(event.ctrlKey) && !($(event.target).hasClass('multi'))){
-            switch(event.target.tagName){
-                case 'IMG':
+            //按下rotate point的動作
+            if($(event.target).hasClass('rotatePoint')){
+                rotating(event.target);
+            }
+
+            return false;   //jump out detect event
+        }
+
+        /*single element event*/
+        
+        //點到元件要讓該元件能resizable，不能選到multi class element(multi class pic or text)
+        if(event.type == 'mousedown' && !(event.ctrlKey) && !($(event.target).hasClass('multi')) && !($(event.target).parent().hasClass('multi'))){
+
+            switch($(event.target).hasClass('pic')){
+                case true:
+                    setRelative($(event.target).parent());  //設定target的position為relative，避免dragging時的位置跑掉
                     singleResizable($(event.target).parent());
-                    rotatable($(event.target).parent());
+                    singleRotatable($(event.target).parent());
                     break;
-                case 'DIV':
-                    singleResizable(event.target,event.pageX,event.pageY);
-                    rotatable(event.target);
-                    break;
-            }
-        }
-
-        //多重element resizable && draggable
-        if((textSelected || picSelected) && event.type == 'mousedown' && event.ctrlKey){
-            $('.ui-resizable-handle').parent().addClass('multi');   //辨別目前要reisze的所有元件，加上一個class做判斷
-            switch(event.target.tagName){
-                case 'IMG':
-                    multiResizable($(event.target).parent());
-                    break;
-                case 'DIV':
-                    multiResizable(event.target);
+                case false:
+                    setRelative(event.target);              //設定target的position為relative，避免dragging時的位置跑掉
+                    singleResizable(event.target);
+                    singleRotatable(event.target);
                     break;
             }
-
-            multiDraggable();   //若再次點到multi class element即可直接draggable，因為前一次點到element時就設定了
         }
 
-        //按下rotate point的動作
-        if(event.type == 'mousedown' && $(event.target).hasClass('rotatePoint')){
-            rotating(event.target);
-        }
 
-        //resizing時的動作
-        if(event.type == 'resize'){
-            //一起resize時跟單element resize時不同，分開處理
-            if($('.multi').length){
-                $('.multi').each(function(){
-                    switch($(this).hasClass('text')){
-                        case true:
-                            resizeText(this);
-                        case false:
-                            resizePic(this);
-                    }
-                });
+
+
+
+
+
+
+        /* multi element event*/
+
+        //讓元件resizable && draggable && rotatable
+        if(event.type == 'mousedown' && event.ctrlKey){
+
+            //已經選過的element取消選取
+            if($(event.target).hasClass('multi')){
+
+                //移除resize & rotate point & multi class，並回復position為absolute
+                $(event.target).removeClass('multi');
+                $(event.target).children().remove('.ui-resizable-handle');
+                $(event.target).children().remove('.rotatePoint');
+                $(event.target).children().remove('.rotatePoint');
+                $(event.target).css('position','absolute');
+
+            }else if($(event.target).parent().hasClass('multi')){
+
+                //移除resize & rotate point & multi class，並回復position為absolute
+                $(event.target).parent().removeClass('multi');
+                $(event.target).parent().children().remove('.ui-resizable-handle');
+                $(event.target).parent().children().remove('.rotatePoint');
+                $(event.target).parent().children().remove('.rotatePoint');
+                $(event.target).parent().css('position','absolute');
+
             }else{
-                switch($('.ui-resizable-handle').parent().hasClass('text')){
+
+                //沒選過的element設定
+                switch($(event.target).hasClass('pic')){
                     case true:
-                        resizeText(event.target);
+                        multiResizable($(event.target).parent());
+                        multiRotatable($(event.target).parent());
+                        break;
                     case false:
-                        resizePic(event.target);
+                        multiResizable(event.target);
+                        multiRotatable(event.target);
+                        break;
                 }
+
+                $('.ui-resizable-handle').parent().addClass('multi');   //辨別目前要reisze的所有元件，加上一個class做判斷(不用event.target是因為第一次點及不一定會按ctrl)
+            }
+            
+        }
+
+        if(event.type == 'mousedown' && $(event.target).hasClass('multi')){
+
+            setRelative(event.target);              //設定target的position為relative，避免dragging時的位置跑掉
+
+            //紀錄目前所有multi element的位置
+            $('.multi').each(function(){
+                $(this)[0].lastTop = $(this).offset().top;
+                $(this)[0].lastLeft = $(this).offset().left;
+            });
+
+            multiDraggable();
+
+        }else if(event.type == 'mousedown' && $(event.target).parent().hasClass('multi')){
+
+            setRelative($(event.target).parent());  //設定target的position為relative，避免dragging時的位置跑掉
+            
+            //紀錄目前所有multi element的位置
+            $('.multi').each(function(){
+                $(this)[0].lastTop = $(this).offset().top;
+                $(this)[0].lastLeft = $(this).offset().left;
+            });
+
+            multiDraggable();
+
+        }else{
+            // do nothing
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //按下text element時的動作
+        if($(event.target).hasClass('text')){
+            switch(event.type){
+                case 'resize':
+                    resizeText(event.target);
+                    break;
+                case 'dblclick':
+                    transToTextarea(event.target);
+                    break;
             }
         }
 
-        //dblclick要將div text轉成textarea
-        if(event.type == 'dblclick' && $(event.target).hasClass('text')){
-            transToTextarea(event.target);
-        }
-
-        //若滑鼠點到poster背景，則取消所有resizable&rotatble element，並將textarea轉成div text
-        if($(event.target).hasClass('posterArea')){
-            cancelResizableElement();
-            cancelRotatePoint();
-            hideSmartLine();
-            if($('.input').length){
-                var lastTextarea = $('.input');
-                lastTextarea.exist = true;
-                toDiv(lastTextarea);
-            }
-        }
     });
 
     //鍵盤事件區

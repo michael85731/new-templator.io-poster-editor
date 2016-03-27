@@ -29,6 +29,12 @@ function adjustTextarea(target){
 	$(target)[0].origin.height = nowHeight;
 }
 
+//轉成textarea時能focus在最後一個字
+function setLastCharFocus(target,content){
+	$(target).text("temp");
+	$(target).text(content);
+}
+
 //計算width
 function countTextWidth(content,fontSize,letterSpacing){
 	var allWidth = [];
@@ -75,10 +81,10 @@ function countTextHeight(content,fontSize,lineHeight){
 }
 
 //強制將目前的input textarea轉成div text
-function forceToDiv(){
+function forceToDivText(){
 	if($('.input').length){
 		var lastTextarea = $('.input');
 		lastTextarea.exist = true;
-		toDiv(lastTextarea);
+		toDivText(lastTextarea);
 	}
 }

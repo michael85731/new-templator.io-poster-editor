@@ -15,13 +15,13 @@ function addPic(target){
 		var picContainer = $("<div />");
 		$(picContainer).css("display","inline-block");
 		$(picContainer).append(newPic);
-		$(picContainer).addClass('pic');
+		$(picContainer).addClass('picContainer');
 
 		$('.posterArea').append(picContainer); 	//先append，不然fixResizePoint會抓不到resizePoint
 
 		singleDraggable(picContainer);
 		singleResizable(picContainer);
-		rotatable(picContainer);
+		singleRotatable(picContainer);
 	}
 }
 

@@ -105,14 +105,9 @@ function mirror(target,position,positionData,resize,resizeData){
 	if(!($('.mirror').length)){
 		var mirror = $(target).clone();
 		$(mirror).addClass('mirror');
+		$(mirror).css('position','absolute');
 		$('.posterArea').append(mirror);
 		$(mirror)[0].origin = $(target)[0].origin; 	//繼承原物件的origin，在resizeText的時候才能正確顯示文字大小
-
-		//有圖片的話，因為分container跟img，所以img要加上mirror class，resize跟drag時才能正確顯示(下面的調整才能正確執行)
-		if($(target).children('img').length){
-			var img = $(mirror).children('img');
-			$(img).addClass('mirror');
-		}
 	}
 
 	switch(position){
@@ -201,18 +196,6 @@ function createSmart(target){
 	$(target).append(smartTop,smartRight,smartBottom,smartLeft); 	//不新增在body是因為adjustSmart可以指定要調整的smartLine，而不用全部一起調整
 }
 
-//when element moves, adjust its smart line position
-function adjustSmart(target){
-	var top = parseFloat($(target).css('top').slice(0,-2));
-	var left = parseFloat($(target).css('left').slice(0,-2));
-
-	//set target's smart line top and left
-	$(target).children('#smartTop').css({'top':0,'left':0 - left - 2});
-	$(target).children('#smartLeft').css({'top':0 - top - 2,'left':0});
-	$(target).children('#smartBottom').css({'top':0+ $(target).height(),'left':0 - left - 2});
-	$(target).children('#smartRight').css({'top':0 - top - 2,'left':0 + $(target).width()});
-}
-
 //remove element's smart line
 function removeSmart(target){
 	$(target).children('.smart').remove();
@@ -223,7 +206,7 @@ function replaceMirrorToReal(old){
 	$('.mirror').children().remove('.ui-resizable-handle');
 	singleDraggable($('div.mirror')[0]);
 	singleResizable($('div.mirror')[0]);
-	rotatable($('div.mirror')[0]);
+	singleRotatable($('div.mirror')[0]);
 	$('.mirror').removeClass('mirror');
 	$(old).remove();
 }

@@ -19,45 +19,15 @@ function resizeText(target){
 	}
 }
 
-//當IMG觸發resize事件時，能跟著變動pic size
-function resizePic(target){
-	nowHeight = $(target).height();
-	nowWidth = $(target).width();
-
-	var pic = target.firstChild;
-	$(pic).height(nowHeight);
-	$(pic).width(nowWidth);
-}
-
-
 //讓taget變成resizable
-function singleResizable(target,mouseX,mouseY){
-	//記錄滑鼠跟target的差距，用於在drag時設定object正確的position
-	$(target)[0].mouseDiffX = mouseX - $(target).offset().left;
-	$(target)[0].mouseDiffY = mouseY - $(target).offset().top;	
-
-	//移除所有resizable element，避免重複resizable，以及將目前仍為textarea的element轉成div text
-	cancelResizableElement();
-	forceToDiv();
-
-	//移除所有的rotate point
-	cancelRotatePoint();
-
+function singleResizable(target){
+	cancelResizableElement();	//移除所有resizable element，避免重複resizable
 	resizable(target);
 }
 
 //讓多個taget變成resizable
 function multiResizable(target){
-	$(target).addClass('multi');
-	forceToDiv();
-
-	//若按到已被選過的element，或對element按下ctrl鍵，則取消選取
-	if($(target).children('.ui-resizable-handle').length){
-		$(target).children().remove('.ui-resizable-handle');
-		$(target).removeClass('multi');		
-	}else{
-		resizable(target);
-	}
+	resizable(target);
 }
 
 function resizable(target){
@@ -126,15 +96,16 @@ function resizable(target){
 //fix n,e,s,w position，因為設定50%是設定原點而非正確的位置
 function fixResizePoint(target){
 	if($(target).css('visibility') == 'visible'){ 	//因為有mirror時也會連帶調整原本的element，而使mirror上的resize point位置不對。要只調整mirror的resize point就必須指定target必須是visible
-		$('.ngripStyle').css('left',$(target).width() / 2 - parseFloat($('.ngripStyle').css('width').slice(0,-2)) / 2);
-		$('.egripStyle').css('top',$(target).height() / 2 - parseFloat($('.egripStyle').css('height').slice(0,-2)) / 2);
-		$('.sgripStyle').css('left',$(target).width() / 2 - parseFloat($('.sgripStyle').css('width').slice(0,-2)) / 2);
-		$('.wgripStyle').css('top',$(target).height() / 2 - parseFloat($('.wgripStyle').css('height').slice(0,-2)) / 2);
+		$(target).children('.ngripStyle').css('left',$(target).width() / 2 - parseFloat($('.ngripStyle').css('width').slice(0,-2)) / 2);
+		$(target).children('.egripStyle').css('top',$(target).height() / 2 - parseFloat($('.egripStyle').css('height').slice(0,-2)) / 2);
+		$(target).children('.sgripStyle').css('left',$(target).width() / 2 - parseFloat($('.sgripStyle').css('width').slice(0,-2)) / 2);
+		$(target).children('.wgripStyle').css('top',$(target).height() / 2 - parseFloat($('.wgripStyle').css('height').slice(0,-2)) / 2);
 	}
 }
 
 //取消resizable element
 function cancelResizableElement(){
+	// console.trace();
 	try{
 		$('.ui-resizable-handle').parent().resizable('destroy'); 	//新加的element會沒有resizable，所以用try避免出現錯誤
 		$('.ui-resizable-handle').remove();
