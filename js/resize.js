@@ -57,11 +57,11 @@ function resizable(target){
 				fixResizePoint(event.target);	//調整resize point
 				break;
 			case 'resizestop':
+
 				//幫原來的原件(target)加上smartLine，因為resize時刪掉了
 				if(!($(event.target).children().hasClass('smart'))){
 					createSmart(event.target);
 				}
-				adjustSmart(event.target);
 				hideSmartLine();
 				
 				if($('.mirror').length){
@@ -72,7 +72,6 @@ function resizable(target){
 	});
 
 	$(target).resizable({
-		alsoResize: '.multi',
 		handles:{
 			'nw': '.nwgripStyle',
 			'ne': '.negripStyle',
