@@ -52,7 +52,7 @@ function multiDraggable(){
 				
 				//set correct element position
 				$('.multi').each(function(){
-					$(this).offset({top:$(this)[0].lastTop + offsetTop,left:$(this)[0].lastLeft + offsetLeft});
+					$(this).offset({top:$(this)[0].lastTop + offsetTop, left:$(this)[0].lastLeft + offsetLeft});
 
 					removeSmart($(this)[0]); 	//不要檢查到自己，所以先把自己的smartLine刪除
 				});
@@ -65,18 +65,12 @@ function multiDraggable(){
 					//如果已經有smart element存在則不用再新增
 					if(!($(this).children().hasClass('smart'))){
 						createSmart($(this)[0]);
-					}
-					hideSmartLine();
-					
-					adjustRotate($(this)[0]);
-
-					if($('.mirror').length){
-						replaceMirrorToReal($(this)[0]); 	//若目前的element有符合smartLine而產生mirror，則刪除原本元件用mirror取代
+						adjustRotate($(this)[0]);
 					}
 				});
 				break;
 		}
-		
+
 	});
 }
 
